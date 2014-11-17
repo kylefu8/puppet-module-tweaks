@@ -1,0 +1,14 @@
+# This file is managed by Puppet and any changes may be destroyed.
+#
+# description: An echo server. This is the tcp version.
+
+service echo
+{
+        type            = <%= _xinetd_xinetd %>
+        id              = <%= _xinetd_id %>
+        socket_type     = <%= _xinetd_socket_type %>
+        protocol        = <%= _xinetd_protocol %>
+        user            = <%= _xinetd_user %>
+        wait            = <%= _xinetd_wait %>
+        FLAGS           = <%= _xinetd_flags %>
+}
