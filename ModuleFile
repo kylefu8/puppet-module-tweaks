@@ -1,0 +1,12 @@
+name         'puppet-module-ltscore'
+version      '0.0.1'
+source       'git@github.com:kylefu8/puppet-module-ltscore.git'
+author       'Kyle Fu'
+license      'Apache License, Version 2.0'
+summary      'Linux Terminal Server related setting and tweaks'
+description  'Collection of LTS related setting and tweaks'
+project_page 'https://github.com/kylefu8/puppet-module-ltscore'
+
+dependency 'puppetlabs/stdlib',        '>= 3.2.0'
+dependency 'ghoneycutt/common',        '>= 1.0.0'
+dependency 'ghoneycutt/stdlibfeatures','>= 0.1.0'

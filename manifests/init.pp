@@ -1,5 +1,5 @@
 class ltscore (
-  $_xinetd_xinetd              = 'INTERNAL',
+  $_xinetd_type                = 'INTERNAL',
   $_xinetd_id                  = 'echo-stream',
   $_xinetd_socket_type         = 'stream',
   $_xinetd_protocol            = 'tcp',
@@ -40,8 +40,8 @@ class ltscore (
     }
   }
 
+# Puppet has a 'bug' on directory creation. When the parent directory is not existed, Puppet will report error. 
 # If you changed $localscratchpath, please read following pages first.
-# Puppet has a 'bug' on directory creation. When the parent directory is not existed, Puppet will report error. Here are pages about this 'bug'.
 # http://www.puppetcookbook.com/posts/creating-a-directory.html
 # http://www.puppetcookbook.com/posts/creating-a-directory-tree.html
 # https://projects.puppetlabs.com/issues/86
