@@ -1,14 +1,14 @@
 # This file is managed by Puppet and any changes may be destroyed.
-#
+# 
 # description: An echo server. This is the tcp version.
 
 service echo
 {
-        type            = <%= _xinetd_type %>
-        id              = <%= _xinetd_id %>
-        socket_type     = <%= _xinetd_socket_type %>
-        protocol        = <%= _xinetd_protocol %>
-        user            = <%= _xinetd_user %>
-        wait            = <%= _xinetd_wait %>
-        FLAGS           = <%= _xinetd_flags %>
+        type            = INTERNAL
+        id              = echo-stream
+        socket_type     = stream
+        protocol        = tcp
+        user            = root
+        wait            = no
+        FLAGS           = IPv6 IPv4
 }
