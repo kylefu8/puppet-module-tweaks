@@ -13,6 +13,8 @@ class ltscore (
   $fix_xinetd                  = true,
 ) {
 
+  validate_absolute_path($fix_localscratch_path)
+
 # Make sure ALSA device is accessible for all users
   if ( $fix_access_to_alsa == true ) and ( $::osfamily == 'Suse' ) {
     exec { 'fix_access_to_alsa':
