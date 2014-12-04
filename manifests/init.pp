@@ -25,8 +25,8 @@ class ltscore (
 # Added ensure => running, for haldaemon
   if ( $fix_haldaemon == true ) and ( $::osfamily == 'Suse' ) and ( $::lsbmajdistrelease == '11' ) {
     service { 'haldaemon':
-      enable => true,
       ensure => running,
+      enable => true,
     }
     exec { 'fix_haldaemon':
       command => 'sed -i \'/^HALDAEMON_BIN/a CPUFREQ="no"\' /etc/init.d/haldaemon',
@@ -52,11 +52,12 @@ class ltscore (
 # Update 2014.12.01: Fixed by common::mkdir_p from Garrett Honeycutt
   if $fix_localscratch == true {
     common::mkdir_p { $fix_localscratch_path: }
-      file { $fix_localscratch_path:
-        ensure => directory,
-        require => Common::Mkdir_p[$fix_localscratch_path],
-        mode => 1777,
-      }
+
+    file { $fix_localscratch_path:
+      ensure  => directory,
+      mode    => '1777',
+      require => Common::Mkdir_p[$fix_localscratch_path],
+    }
   }
 
 # Set /var/log/messages to 0644
@@ -68,7 +69,7 @@ class ltscore (
 
 # Disable services on Suse and Redhat
   if $fix_services == true {
-    case "$::osfamily-$::lsbmajdistrelease" {
+    case "${::osfamily}-${::lsbmajdistrelease}" {
       'Suse-11': {
         $disableservices = [ 'microcode.ctl', 'smartd',
           'boot.open-iscsi', 'libvirtd',
@@ -84,7 +85,7 @@ class ltscore (
           'splash', 'avahi-daemon',
           'fbset', 'xdm',
           'suse-blinux', 'microcode',
-          'splash_early', 'hotkey-setup' ] 
+          'splash_early', 'hotkey-setup' ]
       }
       'RedHat-5': {
         $disableservices = [ 'owcimomd', 'microcode.ctl', 'smartd',
@@ -92,7 +93,7 @@ class ltscore (
           'acpid', 'namcd', 'smbfs',
           'splash', 'avahi-daemon', 'bluez-coldplug',
           'fbset', 'network-remotefs', 'xdm',
-          'splash_early', 
+          'splash_early',
           'hotkey-setup', 'suse-blinux',
           'novell-iprint-listener', 'abrtd' ]
       }
@@ -102,7 +103,7 @@ class ltscore (
           'acpid', 'namcd', 'smbfs',
           'splash', 'avahi-daemon', 'bluez-coldplug',
           'fbset', 'network-remotefs', 'xdm',
-          'splash_early', 
+          'splash_early',
           'hotkey-setup', 'suse-blinux',
           'novell-iprint-listener', 'abrtd' ]
       }
@@ -136,8 +137,8 @@ class ltscore (
   if ( $fix_systohc_for_vm == true ) and ( $::osfamily == 'Suse' ) and ( $is_virtual_real == true ) {
     exec { 'fix_systohc_for_vm' :
       command => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
-      path => '/bin:/usr/bin',
-      onlyif => "grep SYSTOHC=.*yes.* /etc/sysconfig/clock",
+      path    => '/bin:/usr/bin',
+      onlyif  => 'grep SYSTOHC=.*yes.* /etc/sysconfig/clock',
     }
   }
 
@@ -161,7 +162,7 @@ class ltscore (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template("ltscore/xinetd_d_echo.erb"),
+      content => template('ltscore/xinetd_d_echo.erb'),
       notify  => 'Exec[fix_xinetd]',
     }
     exec { 'fix_xinetd':
