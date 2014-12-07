@@ -15,8 +15,15 @@ class ltscore (
 
   validate_absolute_path($fix_localscratch_path)
 
+# convert stringified booleans
+  if type($fix_access_to_alsa) == 'boolean' {
+    $fix_access_to_alsa_real = $fix_access_to_alsa
+  } else {
+    $fix_access_to_alsa_real = str2bool($fix_access_to_alsa)
+  }
+
 # Make sure ALSA device is accessible for all users
-  if ( $fix_access_to_alsa == true ) and ( $::osfamily == 'Suse' ) {
+  if ( $fix_access_to_alsa_real == true ) and ( $::osfamily == 'Suse' ) {
     exec { 'fix_access_to_alsa':
       command => 'sed -i \'s#NAME="snd/%k".*$#NAME="snd/%k",MODE="0666"#\' /etc/udev/rules.d/40-alsa.rules',
       path    => '/bin:/usr/bin',
