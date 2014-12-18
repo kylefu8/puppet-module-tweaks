@@ -15,7 +15,7 @@ class ltscore (
 
   validate_absolute_path($fix_localscratch_path)
 
-# convert stringified booleans
+# convert stringified booleans for fix_access_to_alsa
   if type($fix_access_to_alsa) == 'boolean' {
     $fix_access_to_alsa_real = $fix_access_to_alsa
   } else {
@@ -31,8 +31,15 @@ class ltscore (
     }
   }
 
+# convert stringified booleans for fix_haldaemon
+  if type($fix_haldaemon) == 'boolean' {
+    $fix_haldaemon_real = $fix_haldaemon
+  } else {
+    $fix_haldaemon_real = str2bool($fix_haldaemon)
+  }
+
 # Added ensure => running, for haldaemon
-  if ( $fix_haldaemon == true ) and ( $::osfamily == 'Suse' ) and ( $::lsbmajdistrelease == '11' ) {
+  if ( $fix_haldaemon_real == true ) and ( $::osfamily == 'Suse' ) and ( $::lsbmajdistrelease == '11' ) {
     service { 'haldaemon':
       ensure => running,
       enable => true,
@@ -53,13 +60,20 @@ class ltscore (
 #    }
 #  }
 
+# convert stringified booleans for fix_localscratch
+  if type($fix_localscratch) == 'boolean' {
+    $fix_localscratch_real = $fix_localscratch
+  } else {
+    $fix_localscratch_real = str2bool($fix_localscratch)
+  }
+
 # Puppet has a 'bug' on directory creation. When the parent directory is not existed, Puppet will report error. 
 # If you changed $fix_localscratchpath, please read following pages first.
 # http://www.puppetcookbook.com/posts/creating-a-directory.html
 # http://www.puppetcookbook.com/posts/creating-a-directory-tree.html
 # https://projects.puppetlabs.com/issues/86
 # Update 2014.12.01: Fixed by common::mkdir_p from Garrett Honeycutt
-  if $fix_localscratch == true {
+  if $fix_localscratch_real == true {
     common::mkdir_p { $fix_localscratch_path: }
 
     file { $fix_localscratch_path:
@@ -69,15 +83,29 @@ class ltscore (
     }
   }
 
+# convert stringified booleans for fix_messages_permission
+  if type($fix_messages_permission) == 'boolean' {
+    $fix_messages_permission_real = $fix_messages_permission
+  } else {
+    $fix_messages_permission_real = str2bool($fix_messages_permission)
+  }
+
 # Set /var/log/messages to 0644
-  if $fix_messages_permission == true {
+  if $fix_messages_permission_real == true {
     file { '/var/log/messages' :
       mode => '0644',
     }
   }
 
+# convert stringified booleans for fix_services
+  if type($fix_services) == 'boolean' {
+    $fix_services_real = $fix_services
+  } else {
+    $fix_services_real = str2bool($fix_services)
+  }  
+
 # Disable services on Suse and Redhat
-  if $fix_services == true {
+  if $fix_services_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
       'Suse-11': {
         $disableservices = [ 'microcode.ctl', 'smartd',
@@ -126,8 +154,15 @@ class ltscore (
     }
   }
 
+# convert stringified booleans for fix_swappiness
+  if type($fix_swappiness) == 'boolean' {
+    $fix_swappiness_real = $fix_swappiness
+  } else {
+    $fix_swappiness_real = str2bool($fix_swappiness)
+  }  
+
 # Default value for fix_swappiness is 30
-  if $fix_swappiness == true {
+  if $fix_swappiness_real == true {
     exec { 'swappiness':
       command => "/bin/echo ${fix_swappiness_value} > /proc/sys/vm/swappiness",
       path    => '/bin:/usr/bin',
@@ -143,7 +178,14 @@ class ltscore (
     $is_virtual_real = str2bool( $::is_virtual )
   }
 
-  if ( $fix_systohc_for_vm == true ) and ( $::osfamily == 'Suse' ) and ( $is_virtual_real == true ) {
+# convert stringified booleans for fix_systohc_for_vm
+  if type($fix_systohc_for_vm) == 'boolean' {
+    $fix_systohc_for_vm_real = $fix_systohc_for_vm
+  } else {
+    $fix_systohc_for_vm_real = str2bool($fix_systohc_for_vm)
+  }  
+
+  if ( $fix_systohc_for_vm_real == true ) and ( $::osfamily == 'Suse' ) and ( $is_virtual_real == true ) {
     exec { 'fix_systohc_for_vm' :
       command => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
       path    => '/bin:/usr/bin',
@@ -151,8 +193,15 @@ class ltscore (
     }
   }
 
+# convert stringified booleans for fix_updatedb
+  if type($fix_updatedb) == 'boolean' {
+    $fix_updatedb_real = $fix_updatedb
+  } else {
+    $fix_updatedb_real = str2bool($fix_updatedb)
+  }  
+
 # Disable updatedb in /etc/sysconfig/locate
-  if ( $fix_updatedb == true ) and ( $::osfamily == 'Suse' ) {
+  if ( $fix_updatedb_real == true ) and ( $::osfamily == 'Suse' ) {
     exec { 'fix_updatedb':
       command => 'sed -i \'s/RUN_UPDATEDB=.*yes.*/RUN_UPDATEDB=no/\' /etc/sysconfig/locate',
       path    => '/bin:/usr/bin',
@@ -160,8 +209,15 @@ class ltscore (
     }
   }
 
+# convert stringified booleans for fix_xinetd
+  if type($fix_xinetd) == 'boolean' {
+    $fix_xinetd_real = $fix_xinetd
+  } else {
+    $fix_xinetd_real = str2bool($fix_xinetd)
+  } 
+
 #Fix xinetd service
-  if $fix_xinetd == true {
+  if $fix_xinetd_real == true {
     package { 'xinetd':
       ensure => 'installed',
       before => 'File[/etc/xinetd.d/echo]',
