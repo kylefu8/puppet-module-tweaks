@@ -1,16 +1,16 @@
 class ltscore (
-  $fix_access_to_alsa          = true,
-  $fix_haldaemon               = true,
+  $fix_access_to_alsa          = false,
+  $fix_haldaemon               = false,
 #  $fix_interval_ssh            = true,
-  $fix_localscratch            = true,
+  $fix_localscratch            = false,
   $fix_localscratch_path       = '/local/scratch',
-  $fix_messages_permission     = true,
-  $fix_services                = true,
-  $fix_swappiness              = true,
+  $fix_messages_permission     = false,
+  $fix_services                = false,
+  $fix_swappiness              = false,
   $fix_swappiness_value        = '30',
-  $fix_systohc_for_vm          = true,
-  $fix_updatedb                = true,
-  $fix_xinetd                  = true,
+  $fix_systohc_for_vm          = false,
+  $fix_updatedb                = false,
+  $fix_xinetd                  = false,
 ) {
 
   validate_absolute_path($fix_localscratch_path)
