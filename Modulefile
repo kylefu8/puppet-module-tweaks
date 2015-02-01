@@ -8,5 +8,3 @@ description  'Collection of LTS related setting and tweaks'
 project_page 'https://github.com/kylefu8/puppet-module-ltscore'
 
 dependency 'puppetlabs/stdlib',        '>= 3.2.0'
-dependency 'ghoneycutt/common',        '>= 1.0.0'
-dependency 'ghoneycutt/stdlibfeatures','>= 0.1.0'
