@@ -102,7 +102,7 @@ class ltscore (
     $fix_services_real = $fix_services
   } else {
     $fix_services_real = str2bool($fix_services)
-  }  
+  }
 
 # Disable services on Suse and Redhat
   if $fix_services_real == true {
@@ -159,7 +159,7 @@ class ltscore (
     $fix_swappiness_real = $fix_swappiness
   } else {
     $fix_swappiness_real = str2bool($fix_swappiness)
-  }  
+  }
 
 # Default value for fix_swappiness is 30
   if $fix_swappiness_real == true {
@@ -183,7 +183,7 @@ class ltscore (
     $fix_systohc_for_vm_real = $fix_systohc_for_vm
   } else {
     $fix_systohc_for_vm_real = str2bool($fix_systohc_for_vm)
-  }  
+  }
 
   if ( $fix_systohc_for_vm_real == true ) and ( $::osfamily == 'Suse' ) and ( $is_virtual_real == true ) {
     exec { 'fix_systohc_for_vm' :
@@ -198,7 +198,7 @@ class ltscore (
     $fix_updatedb_real = $fix_updatedb
   } else {
     $fix_updatedb_real = str2bool($fix_updatedb)
-  }  
+  }
 
 # Disable updatedb in /etc/sysconfig/locate
   if ( $fix_updatedb_real == true ) and ( $::osfamily == 'Suse' ) {
@@ -214,7 +214,7 @@ class ltscore (
     $fix_xinetd_real = $fix_xinetd
   } else {
     $fix_xinetd_real = str2bool($fix_xinetd)
-  } 
+  }
 
 #Fix xinetd service
   if $fix_xinetd_real == true {
