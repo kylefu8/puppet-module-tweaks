@@ -16,7 +16,7 @@ class ltscore (
   validate_absolute_path($fix_localscratch_path)
 
 # convert stringified booleans for fix_access_to_alsa
-  if type($fix_access_to_alsa) == 'boolean' {
+  if is_string($fix_access_to_alsa) == false {
     $fix_access_to_alsa_real = $fix_access_to_alsa
   } else {
     $fix_access_to_alsa_real = str2bool($fix_access_to_alsa)
@@ -32,7 +32,7 @@ class ltscore (
   }
 
 # convert stringified booleans for fix_haldaemon
-  if type($fix_haldaemon) == 'boolean' {
+  if is_string($fix_haldaemon) == false {
     $fix_haldaemon_real = $fix_haldaemon
   } else {
     $fix_haldaemon_real = str2bool($fix_haldaemon)
@@ -61,7 +61,7 @@ class ltscore (
 #  }
 
 # convert stringified booleans for fix_localscratch
-  if type($fix_localscratch) == 'boolean' {
+  if is_string($fix_localscratch) == false {
     $fix_localscratch_real = $fix_localscratch
   } else {
     $fix_localscratch_real = str2bool($fix_localscratch)
@@ -76,15 +76,18 @@ class ltscore (
   if $fix_localscratch_real == true {
     common::mkdir_p { $fix_localscratch_path: }
 
-    file { $fix_localscratch_path:
+    file { 'fix_localscratch_path':
       ensure  => directory,
+      path    => $fix_localscratch_path,
+      owner   => 'root',
+      group   => 'root',
       mode    => '1777',
       require => Common::Mkdir_p[$fix_localscratch_path],
     }
   }
 
 # convert stringified booleans for fix_messages_permission
-  if type($fix_messages_permission) == 'boolean' {
+  if is_string($fix_messages_permission) == false {
     $fix_messages_permission_real = $fix_messages_permission
   } else {
     $fix_messages_permission_real = str2bool($fix_messages_permission)
@@ -98,7 +101,7 @@ class ltscore (
   }
 
 # convert stringified booleans for fix_services
-  if type($fix_services) == 'boolean' {
+  if is_string($fix_services) == false {
     $fix_services_real = $fix_services
   } else {
     $fix_services_real = str2bool($fix_services)
@@ -155,7 +158,7 @@ class ltscore (
   }
 
 # convert stringified booleans for fix_swappiness
-  if type($fix_swappiness) == 'boolean' {
+  if is_string($fix_swappiness) == false {
     $fix_swappiness_real = $fix_swappiness
   } else {
     $fix_swappiness_real = str2bool($fix_swappiness)
@@ -172,14 +175,14 @@ class ltscore (
 
 # $::is_virtual == 'true' works.  $::is_virtual == true not work. Because it's a 'fact'.
 # So convert stringified $::is_virtual to booleans $is_virtual_real
-  if type($::is_virtual) == 'boolean' {
+  if is_string($::is_virtual) == false {
     $is_virtual_real = $::is_virtual
   } else {
     $is_virtual_real = str2bool( $::is_virtual )
   }
 
 # convert stringified booleans for fix_systohc_for_vm
-  if type($fix_systohc_for_vm) == 'boolean' {
+  if is_string($fix_systohc_for_vm) == false {
     $fix_systohc_for_vm_real = $fix_systohc_for_vm
   } else {
     $fix_systohc_for_vm_real = str2bool($fix_systohc_for_vm)
@@ -194,7 +197,7 @@ class ltscore (
   }
 
 # convert stringified booleans for fix_updatedb
-  if type($fix_updatedb) == 'boolean' {
+  if is_string($fix_updatedb) == false {
     $fix_updatedb_real = $fix_updatedb
   } else {
     $fix_updatedb_real = str2bool($fix_updatedb)
@@ -210,7 +213,7 @@ class ltscore (
   }
 
 # convert stringified booleans for fix_xinetd
-  if type($fix_xinetd) == 'boolean' {
+  if is_string($fix_xinetd) == false {
     $fix_xinetd_real = $fix_xinetd
   } else {
     $fix_xinetd_real = str2bool($fix_xinetd)

@@ -7,4 +7,4 @@ summary      'Linux Terminal Server related setting and tweaks'
 description  'Collection of LTS related setting and tweaks'
 project_page 'https://github.com/kylefu8/puppet-module-ltscore'
 
-dependency 'puppetlabs/stdlib',        '>= 3.2.0'
+dependency 'puppetlabs/stdlib', '>= 3.2.0'
