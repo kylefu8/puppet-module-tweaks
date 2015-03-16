@@ -148,10 +148,10 @@ class ltscore (
           'novell-iprint-listener', 'abrtd' ]
       }
       default: {
-        fail( "Can not handle ${::osfamily}-${::lsbmajdistrelease}" )
+        fail( "Can not handle ${::osfamily}-${::lsbmajdistrelease}. Only support RedHat 5&6, Suse 10&11." )
       }
     }
-  
+
     service { $disableservices :
       enable => false,
     }

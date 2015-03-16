@@ -74,6 +74,82 @@ describe 'ltscore' do
     end
   end
 
+#Services
+  platforms = {
+    'Suse-10' =>
+      { :osfamily => 'Suse',
+        :release  => '10',
+        :services => [ 'smartd', 'owcimomd', 'powersaved', 'acpid',
+      'namcd', 'smbfs', 'splash', 'avahi-daemon', 'fbset', 'xdm',
+          'suse-blinux', 'microcode', 'splash_early', 'hotkey-setup' ],
+      },
+    'Suse-11' =>
+      { :osfamily => 'Suse',
+        :release  => '11',
+        :services => [ 'microcode.ctl', 'smartd', 'boot.open-iscsi',
+      'libvirtd', 'acpid', 'namcd', 'smbfs', 'splash', 'avahi-daemon',
+      'bluez-coldplug', 'fbset', 'network-remotefs', 'xdm', 'splash_early' ],
+      },
+    'RedHat-5' =>
+      { :osfamily => 'RedHat',
+        :release  => '5',
+        :services => [ 'owcimomd', 'microcode.ctl', 'smartd',
+          'boot.open-iscsi', 'libvirtd', 'powersaved', 'acpid', 'namcd',
+          'smbfs', 'splash', 'avahi-daemon', 'bluez-coldplug', 'fbset',
+          'network-remotefs', 'xdm', 'splash_early', 'hotkey-setup',
+          'suse-blinux', 'novell-iprint-listener', 'abrtd' ],
+      },
+    'RedHat-6' =>
+      { :osfamily => 'RedHat',
+        :release  => '6',
+        :services => [ 'owcimomd', 'microcode.ctl', 'smartd',
+          'boot.open-iscsi', 'libvirtd', 'powersaved', 'acpid', 'namcd',
+          'smbfs', 'splash', 'avahi-daemon', 'bluez-coldplug', 'fbset',
+          'network-remotefs', 'xdm', 'splash_early', 'hotkey-setup',
+          'suse-blinux', 'novell-iprint-listener', 'abrtd' ],
+      },
+  }
+
+    platforms.sort.each do |k,v|
+      context "When fix_services set to true, and OS is #{k}," do
+        let (:params) { { :fix_services => true } }
+        let :facts do
+          { :osfamily          => v[:osfamily],
+            :lsbmajdistrelease => v[:release],
+          }
+        end
+        if v[:services].class == Array
+          v[:services].each do |srv|
+            it {
+              should contain_service(srv).with({
+                'enable' => false,
+              })
+            }
+          end
+        else
+          it {
+            should contain_service(v[:services]).with({
+              'enable' => false,
+            })
+          }
+        end
+      end
+    end
+
+  context 'When fix_services set to true, but OS is not supported' do
+    let (:params) { { :fix_services => true } }
+    let :facts do
+      { :osfamily          => 'Debian',
+        :lsbmajdistrelease => '12',
+      }
+    end
+    it 'should fail' do
+      expect {
+        should
+      }.to raise_error(Puppet::Error, /^Can not handle Debian-12. Only support RedHat 5&6, Suse 10&11./)
+    end
+  end
+
   context 'When fix_swappiness set to true' do
     let(:params) { { :fix_swappiness => true } }
     it do
