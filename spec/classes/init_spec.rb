@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe 'ltscore' do
   context 'When fix_access_to_alsa set to true' do
-    let(:params) { { :fix_access_to_alsa => 'true' } }
+    let(:params) { { :fix_access_to_alsa => true } }
     let(:facts) { { :osfamily => 'Suse' } }
     it do
       should contain_exec('fix_access_to_alsa').with({
@@ -13,7 +13,7 @@ describe 'ltscore' do
   end
 
   context 'When fix_haldaemon set to true, and osfamily == Suse, lsbmajdistrelease == 11' do
-    let(:params) { { :fix_haldaemon => 'true' } }
+    let(:params) { { :fix_haldaemon => true } }
     let :facts do
       { :osfamily => 'Suse',
         :lsbmajdistrelease => '11',
@@ -24,8 +24,6 @@ describe 'ltscore' do
       'ensure' => 'running',
       'enable' => 'true',
       })
-    end
-    it do
       should contain_exec('fix_haldaemon').with({
       'command' => 'sed -i \'/^HALDAEMON_BIN/a CPUFREQ="no"\' /etc/init.d/haldaemon',
       'path'    => '/bin:/usr/bin',
@@ -36,10 +34,7 @@ describe 'ltscore' do
   end
 
   context 'When fix_localscratch set to true' do
-    let :params do
-      { :fix_localscratch => 'true',
-      }
-  end
+    let (:params) { { :fix_localscratch => true } }
     it do
       should contain_file('fix_localscratch_path').with({
         'ensure'  => 'directory',
@@ -54,8 +49,8 @@ describe 'ltscore' do
 
   context 'When fix_localscratch set to true, fix_localscratch_path set to /local/test' do
     let :params do
-      { :fix_localscratch => 'true',
-        :fix_localscratch_path => '/local/test'
+      { :fix_localscratch => true,
+        :fix_localscratch_path => '/local/test',
       }
   end
     it do
@@ -70,13 +65,76 @@ describe 'ltscore' do
     end
   end
 
-  context 'When fix_xinetd set to true' do
-    let(:params) { { :fix_xinetd => 'true' } }
+  context 'When fix_messages_permission set to true' do
+    let (:params) { { :fix_messages_permission => true } }
     it do
-      should contain_package('xinetd').with_ensure('installed')
+      should contain_file('/var/log/messages').with({
+        'mode'    => '0644',
+      })
+    end
+  end
+
+  context 'When fix_swappiness set to true' do
+    let(:params) { { :fix_swappiness => true } }
+    it do
+      should contain_exec('swappiness').with({
+        'command' => '/bin/echo 30 > /proc/sys/vm/swappiness',
+        'path'    => '/bin:/usr/bin',
+        'unless'  => '/bin/grep \'^30$\' /proc/sys/vm/swappiness',
+      })
+    end
+  end
+
+  context 'When fix_swappiness set to true, and fix_swappiness_value set to 60' do
+    let :params do
+      { :fix_swappiness => true,
+        :fix_swappiness_value => '60',
+      }
     end
     it do
-      should contain_file('/etc/xinetd.d/echo')
+      should contain_exec('swappiness').with({
+        'command' => '/bin/echo 60 > /proc/sys/vm/swappiness',
+        'path'    => '/bin:/usr/bin',
+        'unless'  => '/bin/grep \'^60$\' /proc/sys/vm/swappiness',
+      })
+    end
+  end
+
+  context 'When fix_systohc_for_vm set to true, and osfamily == Suse & is_virtual_real == true' do
+    let(:params) { { :fix_systohc_for_vm => 'true' } }
+    let :facts do
+      { :osfamily => 'Suse',
+        :is_virtual => true,
+      }
+    end
+    it do
+      should contain_exec('fix_systohc_for_vm').with({
+        'command' => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
+        'path'    => '/bin:/usr/bin',
+        'onlyif'  => 'grep SYSTOHC=.*yes.* /etc/sysconfig/clock',
+      })
+    end
+  end
+
+  context 'When fix_updatedb set to true, and osfamily == Suse' do
+    let (:params) { { :fix_updatedb => 'true' } }
+    let (:facts) { { :osfamily => 'Suse' } }
+    it do
+      should contain_exec('fix_updatedb').with({
+        'command' => 'sed -i \'s/RUN_UPDATEDB=.*yes.*/RUN_UPDATEDB=no/\' /etc/sysconfig/locate',
+        'path'    => '/bin:/usr/bin',
+        'onlyif'  => 'grep RUN_UPDATEDB=.*yes.* /etc/sysconfig/locate',
+      })
+    end
+  end
+
+  context 'When fix_xinetd set to true' do
+    let(:params) { { :fix_xinetd => true } }
+    it do
+      should contain_package('xinetd').with({
+       'ensure' => 'installed',
+       'before' => 'File[/etc/xinetd.d/echo]',
+      })
     end
     it do
       should contain_file('/etc/xinetd.d/echo').with({
@@ -84,8 +142,26 @@ describe 'ltscore' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
+        'notify'  => 'Exec[fix_xinetd]',
+      })
+      should contain_file('/etc/xinetd.d/echo').with_content(/^# This file is managed by Puppet and any changes may be destroyed.$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^# description: An echo server. This is the tcp version.$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^service echo$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^\{$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^        type            = INTERNAL$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^        id              = echo-stream$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^        socket_type     = stream$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^        protocol        = tcp$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^        user            = root$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^        wait            = no$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^        FLAGS           = IPv6 IPv4$/)
+      should contain_file('/etc/xinetd.d/echo').with_content(/^\}$/)
+      should contain_exec('fix_xinetd').with({
+        'command'     => '/sbin/service xinetd restart',
+        'refreshonly' => true,
       })
     end
   end
+
 end
 
