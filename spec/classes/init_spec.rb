@@ -1,37 +1,118 @@
 require 'spec_helper'
 describe 'ltscore' do
-  context 'When fix_access_to_alsa set to true' do
-    let(:params) { { :fix_access_to_alsa => true } }
-    let(:facts) { { :osfamily => 'Suse' } }
-    it do
-      should contain_exec('fix_access_to_alsa').with({
-        'command' => 'sed -i \'s#NAME="snd/%k".*$#NAME="snd/%k",MODE="0666"#\' /etc/udev/rules.d/40-alsa.rules',
-        'path'    => '/bin:/usr/bin',
-        'unless'  => 'test -f /etc/udev/rules.d/40-alsa.rules && grep "snd.*0666" /etc/udev/rules.d/40-alsa.rules',
-      })
+
+  fixes = {
+    'RedHat-5' => { :os => 'RedHat', :rel => '5',  :access_to_alsa => false, :haldaemon => false, :services => true, :systohc_for_vm => false, :updatedb => false, },
+    'RedHat-6' => { :os => 'RedHat', :rel => '6',  :access_to_alsa => false, :haldaemon => false, :services => true, :systohc_for_vm => false, :updatedb => false, },
+    'Suse-10' =>  { :os => 'Suse',   :rel => '10', :access_to_alsa => true,  :haldaemon => false, :services => true, :systohc_for_vm => true,  :updatedb => true, },
+    'Suse-11' =>  { :os => 'Suse',   :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :services => true, :systohc_for_vm => true,  :updatedb => true, },
+    }
+
+  fixes.sort.each do |k,v|
+    describe "When OS is #{k}" do
+      let :facts do
+        { :osfamily          => v[:os],
+          :lsbmajdistrelease => v[:rel],
+        }
+      end
+
+# <fix_access_to_alsa functionality & stringified bools handling>
+      [true,'true',false,'false'].each do |value|
+        context "with fix_access_to_alsa set to valid #{value} (as #{value.class})" do
+          let :params do
+            { :fix_access_to_alsa => value,
+            }
+          end
+          if ( value == true or value == 'true' ) and v[:access_to_alsa] == true
+            it do
+              should contain_exec('fix_access_to_alsa').with({
+                'command' => 'sed -i \'s#NAME="snd/%k".*$#NAME="snd/%k",MODE="0666"#\' /etc/udev/rules.d/40-alsa.rules',
+                'path'    => '/bin:/usr/bin',
+                'unless'  => 'test -f /etc/udev/rules.d/40-alsa.rules && grep "snd.*0666" /etc/udev/rules.d/40-alsa.rules',
+              })
+            end
+          else
+            it do
+              should_not contain_exec('fix_access_to_alsa')
+            end
+          end
+        end
+      end
+# </fix_access_to_alsa functionality & stringified bools handling>
+
+# <fix_haldaemon functionality & stringified bools handling>
+      [true,'true',false,'false'].each do |value|
+        context "with fix_haldaemon set to valid #{value} (as #{value.class})" do
+          let :params do
+            { :fix_haldaemon => value,
+            }
+          end
+          if ( value == true or value == 'true' ) and v[:haldaemon] == true
+            it do
+              should contain_service('haldaemon').with({
+              'ensure' => 'running',
+              'enable' => 'true',
+              })
+              should contain_exec('fix_haldaemon').with({
+              'command' => 'sed -i \'/^HALDAEMON_BIN/a CPUFREQ="no"\' /etc/init.d/haldaemon',
+              'path'    => '/bin:/usr/bin',
+              'unless'  => 'grep CPUFREQ /etc/init.d/haldaemon',
+              'notify'  => 'Service[haldaemon]',
+              })
+            end
+          else
+            it do
+              should_not contain_service('haldaemon')
+            end
+            it do
+              should_not contain_exec('fix_haldaemon')
+            end
+          end
+        end
+      end
+# </fix_haldaemon functionality & stringified bools handling>
+
     end
   end
 
-  context 'When fix_haldaemon set to true, and osfamily == Suse, lsbmajdistrelease == 11' do
-    let(:params) { { :fix_haldaemon => true } }
-    let :facts do
-      { :osfamily => 'Suse',
-        :lsbmajdistrelease => '11',
-      }
-    end
-    it do
-      should contain_service('haldaemon').with({
-      'ensure' => 'running',
-      'enable' => 'true',
-      })
-      should contain_exec('fix_haldaemon').with({
-      'command' => 'sed -i \'/^HALDAEMON_BIN/a CPUFREQ="no"\' /etc/init.d/haldaemon',
-      'path'    => '/bin:/usr/bin',
-      'unless'  => 'grep CPUFREQ /etc/init.d/haldaemon',
-      'notify'  => 'Service[haldaemon]',
-      })
+
+# <fix_access_to_alsa should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
+    context "When fix_access_to_alsa set to invalid #{value} (as #{value.class}) on supported OS" do
+      let (:params) { { :fix_access_to_alsa => value } }
+      let :facts do
+        { :osfamily          => 'Suse',
+          :lsbmajdistrelease => '11',
+        }
+      end
+
+      it 'should fail' do
+        expect {
+          should
+        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+      end
     end
   end
+# </fix_access_to_alsa should fail on invalid types>
+
+# <fix_haldaemon should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
+    context "When fix_haldaemon set to invalid #{value} (as #{value.class}) on supported OS" do
+      let (:params) { { :fix_haldaemon => value } }
+      let :facts do
+        { :osfamily          => 'Suse',
+          :lsbmajdistrelease => '11',
+        }
+      end
+
+      it 'should fail' do
+        expect {
+          should
+        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+      end
+    end
+  end
+# </fix_haldaemon should fail on invalid types>
 
   context 'When fix_localscratch set to true' do
     let (:params) { { :fix_localscratch => true } }
