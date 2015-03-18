@@ -16,10 +16,16 @@ class ltscore (
   validate_absolute_path($fix_localscratch_path)
 
 # convert stringified booleans for fix_access_to_alsa
-  if is_string($fix_access_to_alsa) == false {
-    $fix_access_to_alsa_real = $fix_access_to_alsa
-  } else {
-    $fix_access_to_alsa_real = str2bool($fix_access_to_alsa)
+  case $fix_access_to_alsa {
+    'true', 'false': {
+      $fix_access_to_alsa_real = str2bool($fix_access_to_alsa)
+    }
+    true, false: {
+      $fix_access_to_alsa_real = $fix_access_to_alsa
+    }
+    default:{
+      fail("str2bool():")
+    }
   }
 
 # Make sure ALSA device is accessible for all users
@@ -32,10 +38,16 @@ class ltscore (
   }
 
 # convert stringified booleans for fix_haldaemon
-  if is_string($fix_haldaemon) == false {
-    $fix_haldaemon_real = $fix_haldaemon
-  } else {
-    $fix_haldaemon_real = str2bool($fix_haldaemon)
+  case $fix_haldaemon {
+    'true', 'false': {
+      $fix_haldaemon_real = str2bool($fix_haldaemon)
+    }
+    true, false: {
+      $fix_haldaemon_real = $fix_haldaemon
+    }
+    default:{
+      fail("str2bool():")
+    }
   }
 
 # Added ensure => running, for haldaemon

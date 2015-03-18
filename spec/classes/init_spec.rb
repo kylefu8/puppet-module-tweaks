@@ -95,9 +95,9 @@ describe 'ltscore' do
   end
 # </fix_access_to_alsa should fail on invalid types>
 
-# <fix_access_to_alsa should fail on invalid types>
+# <fix_haldaemon should fail on invalid types>
   ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
-    context "When fix_access_to_alsa set to invalid #{value} (as #{value.class}) on supported OS" do
+    context "When fix_haldaemon set to invalid #{value} (as #{value.class}) on supported OS" do
       let (:params) { { :fix_haldaemon => value } }
       let :facts do
         { :osfamily          => 'Suse',
@@ -112,7 +112,7 @@ describe 'ltscore' do
       end
     end
   end
-# </fix_access_to_alsa should fail on invalid types>
+# </fix_haldaemon should fail on invalid types>
 
   context 'When fix_localscratch set to true' do
     let (:params) { { :fix_localscratch => true } }
