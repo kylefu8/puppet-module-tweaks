@@ -60,12 +60,18 @@ describe 'ltscore' do
               'notify'  => 'Service[haldaemon]',
               })
             end
-          else
+          elsif value == false or value == 'false'
             it do
               should_not contain_service('haldaemon')
             end
             it do
               should_not contain_exec('fix_haldaemon')
+            end
+          else
+            it 'should fail' do
+              expect {
+                should
+              }.to raise_error(Puppet::Error,/fix_haldaemon is only supported on Suse 11/)
             end
           end
         end

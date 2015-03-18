@@ -51,16 +51,23 @@ class ltscore (
   }
 
 # Added ensure => running, for haldaemon
-  if ( $fix_haldaemon_real == true ) and ( $::osfamily == 'Suse' ) and ( $::lsbmajdistrelease == '11' ) {
-    service { 'haldaemon':
-      ensure => running,
-      enable => true,
-    }
-    exec { 'fix_haldaemon':
-      command => 'sed -i \'/^HALDAEMON_BIN/a CPUFREQ="no"\' /etc/init.d/haldaemon',
-      path    => '/bin:/usr/bin',
-      unless  => 'grep CPUFREQ /etc/init.d/haldaemon',
-      notify  => Service['haldaemon'],
+  if $fix_haldaemon_real == true {
+    case "${::osfamily}-${::lsbmajdistrelease}" {
+      'Suse-11': {
+        service { 'haldaemon':
+          ensure => running,
+          enable => true,
+        }
+        exec { 'fix_haldaemon':
+          command => 'sed -i \'/^HALDAEMON_BIN/a CPUFREQ="no"\' /etc/init.d/haldaemon',
+          path    => '/bin:/usr/bin',
+          unless  => 'grep CPUFREQ /etc/init.d/haldaemon',
+          notify  => Service['haldaemon'],
+        }
+      }
+      default: {
+        fail("fix_haldaemon is only supported on Suse 11")
+      }
     }
   }
 
