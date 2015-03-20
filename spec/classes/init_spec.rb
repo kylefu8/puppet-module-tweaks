@@ -2,10 +2,11 @@ require 'spec_helper'
 describe 'ltscore' do
 
   fixes = {
-    'RedHat-5' => { :os => 'RedHat', :rel => '5',  :access_to_alsa => false, :haldaemon => false, :services => true, :systohc_for_vm => false, :updatedb => false, },
-    'RedHat-6' => { :os => 'RedHat', :rel => '6',  :access_to_alsa => false, :haldaemon => false, :services => true, :systohc_for_vm => false, :updatedb => false, },
-    'Suse-10' =>  { :os => 'Suse',   :rel => '10', :access_to_alsa => true,  :haldaemon => false, :services => true, :systohc_for_vm => true,  :updatedb => true, },
-    'Suse-11' =>  { :os => 'Suse',   :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :services => true, :systohc_for_vm => true,  :updatedb => true, },
+    'RedHat-5' => { :os => 'RedHat', :rel => '5', },
+    'RedHat-6' => { :os => 'RedHat', :rel => '6', },
+    'Suse-10' =>  { :os => 'Suse',   :rel => '10', },
+    'Suse-11' =>  { :os => 'Suse',   :rel => '11', },
+    'Debian-12' =>  { :os => 'Debian',   :rel => '12', },
     }
 
   fixes.sort.each do |k,v|
@@ -23,7 +24,7 @@ describe 'ltscore' do
             { :fix_access_to_alsa => value,
             }
           end
-          if ( value == true or value == 'true' ) and v[:access_to_alsa] == true
+          if ( value == true or value == 'true' ) and v[:os] == 'Suse'
             it do
               should contain_exec('fix_access_to_alsa').with({
                 'command' => 'sed -i \'s#NAME="snd/%k".*$#NAME="snd/%k",MODE="0666"#\' /etc/udev/rules.d/40-alsa.rules',
@@ -31,9 +32,15 @@ describe 'ltscore' do
                 'unless'  => 'test -f /etc/udev/rules.d/40-alsa.rules && grep "snd.*0666" /etc/udev/rules.d/40-alsa.rules',
               })
             end
-          else
+          elsif ( value == false or value == 'false' )
             it do
               should_not contain_exec('fix_access_to_alsa')
+            end
+          else
+            it 'should fail' do
+              expect {
+                should
+              }.to raise_error(Puppet::Error,/fix_access_to_alsa is only supported on Suse./)
             end
           end
         end
@@ -47,17 +54,17 @@ describe 'ltscore' do
             { :fix_haldaemon => value,
             }
           end
-          if ( value == true or value == 'true' ) and v[:haldaemon] == true
+          if ( value == true or value == 'true' ) and ( v[:os] == 'Suse' and v[:rel] == '11')
             it do
               should contain_service('haldaemon').with({
-              'ensure' => 'running',
-              'enable' => 'true',
+                'ensure' => 'running',
+                'enable' => 'true',
               })
               should contain_exec('fix_haldaemon').with({
-              'command' => 'sed -i \'/^HALDAEMON_BIN/a CPUFREQ="no"\' /etc/init.d/haldaemon',
-              'path'    => '/bin:/usr/bin',
-              'unless'  => 'grep CPUFREQ /etc/init.d/haldaemon',
-              'notify'  => 'Service[haldaemon]',
+                'command' => 'sed -i \'/^HALDAEMON_BIN/a CPUFREQ="no"\' /etc/init.d/haldaemon',
+                'path'    => '/bin:/usr/bin',
+                'unless'  => 'grep CPUFREQ /etc/init.d/haldaemon',
+                'notify'  => 'Service[haldaemon]',
               })
             end
           elsif value == false or value == 'false'

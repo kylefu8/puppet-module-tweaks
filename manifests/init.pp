@@ -24,11 +24,18 @@ class ltscore (
   }
 
 # Make sure ALSA device is accessible for all users
-  if ( $fix_access_to_alsa_real == true ) and ( $::osfamily == 'Suse' ) {
-    exec { 'fix_access_to_alsa':
-      command => 'sed -i \'s#NAME="snd/%k".*$#NAME="snd/%k",MODE="0666"#\' /etc/udev/rules.d/40-alsa.rules',
-      path    => '/bin:/usr/bin',
-      unless  => 'test -f /etc/udev/rules.d/40-alsa.rules && grep "snd.*0666" /etc/udev/rules.d/40-alsa.rules',
+  if ( $fix_access_to_alsa_real == true ) {
+    case "$::osfamily" {
+      'Suse': {
+        exec { 'fix_access_to_alsa':
+          command => 'sed -i \'s#NAME="snd/%k".*$#NAME="snd/%k",MODE="0666"#\' /etc/udev/rules.d/40-alsa.rules',
+          path    => '/bin:/usr/bin',
+          unless  => 'test -f /etc/udev/rules.d/40-alsa.rules && grep "snd.*0666" /etc/udev/rules.d/40-alsa.rules',
+        }
+      }
+      default: {
+        fail("fix_access_to_alsa is only supported on Suse.")
+      }
     }
   }
 
@@ -56,7 +63,7 @@ class ltscore (
         }
       }
       default: {
-        fail("fix_haldaemon is only supported on Suse 11")
+        fail("fix_haldaemon is only supported on Suse 11.")
       }
     }
   }
