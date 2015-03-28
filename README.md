@@ -15,6 +15,18 @@ This module has been tested to work on the following systems.
 * Suse 10
 * Suse 11
 
+## Function support matrix ##
+#FunctionMatrix           EL-5  EL-6  Suse-10  Suse-11  Others
+#fix_access_to_alsa       -     -     *        *        -
+#fix_haldaemon            -     -     -        *        -
+#fix_localscratch         *     *     *        *        -
+#fix_messages_permission  *     *     *        *        -
+#fix_services             *     *     *        *        -
+#fix_swappiness           *     *     *        *        -
+#fix_systohc_for_vm       -     -     *        *        -
+#fix_updatedb             -     -     *        *        -
+#fix_xinetd               *     *     *        *        -
+
 ===
 
 # Parameters #
@@ -104,4 +116,5 @@ Xinetd will be fixed(install package, configure /etc/xinetd.d/echo) if it's true
 Nothing will happen with xinetd if it's false.
 
 - *Default*: true
+
 

@@ -25,8 +25,8 @@ class ltscore (
 
 # Make sure ALSA device is accessible for all users
   if ( $fix_access_to_alsa_real == true ) {
-    case "$::osfamily" {
-      'Suse': {
+    case "${::osfamily}-${::lsbmajdistrelease}" {
+      'Suse-10', 'Suse-11': {
         exec { 'fix_access_to_alsa':
           command => 'sed -i \'s#NAME="snd/%k".*$#NAME="snd/%k",MODE="0666"#\' /etc/udev/rules.d/40-alsa.rules',
           path    => '/bin:/usr/bin',
@@ -34,7 +34,7 @@ class ltscore (
         }
       }
       default: {
-        fail("fix_access_to_alsa is only supported on Suse.")
+        fail("fix_access_to_alsa is only supported on Suse 10&11.")
       }
     }
   }
@@ -77,7 +77,7 @@ class ltscore (
 #  }
 
 # convert stringified booleans for fix_localscratch
-  if is_string($fix_localscratch) == false {
+  if is_bool($fix_localscratch) {
     $fix_localscratch_real = $fix_localscratch
   } else {
     $fix_localscratch_real = str2bool($fix_localscratch)
@@ -89,21 +89,28 @@ class ltscore (
 # http://www.puppetcookbook.com/posts/creating-a-directory-tree.html
 # https://projects.puppetlabs.com/issues/86
 # Update 2014.12.01: Fixed by common::mkdir_p from Garrett Honeycutt
-  if $fix_localscratch_real == true {
-    common::mkdir_p { $fix_localscratch_path: }
+  if ( $fix_localscratch_real == true ) {
+    case "${::osfamily}-${::lsbmajdistrelease}" {
+      'Suse-10', 'Suse-11', 'Redhat-5', 'Redhat-6': {
+        common::mkdir_p { $fix_localscratch_path: }
 
-    file { 'fix_localscratch_path':
-      ensure  => directory,
-      path    => $fix_localscratch_path,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '1777',
-      require => Common::Mkdir_p[$fix_localscratch_path],
+        file { 'fix_localscratch_path':
+          ensure  => directory,
+          path    => $fix_localscratch_path,
+          owner   => 'root',
+          group   => 'root',
+          mode    => '1777',
+          require => Common::Mkdir_p[$fix_localscratch_path],
+        }
+      }
+      default: {
+        fail("fix_localscratch is only supported on Redhat 5&6, Suse 10&11.")
+      }
     }
   }
 
 # convert stringified booleans for fix_messages_permission
-  if is_string($fix_messages_permission) == false {
+  if is_bool($fix_messages_permission) {
     $fix_messages_permission_real = $fix_messages_permission
   } else {
     $fix_messages_permission_real = str2bool($fix_messages_permission)
@@ -111,13 +118,20 @@ class ltscore (
 
 # Set /var/log/messages to 0644
   if $fix_messages_permission_real == true {
-    file { '/var/log/messages' :
-      mode => '0644',
+    case "${::osfamily}-${::lsbmajdistrelease}" {
+      'Suse-10', 'Suse-11', 'Redhat-5', 'Redhat-6': {
+        file { '/var/log/messages' :
+          mode => '0644',
+        }
+      }
+      default: {
+        fail("fix_messages_permission is only supported on Redhat 5&6, Suse 10&11.")
+      }
     }
   }
 
 # convert stringified booleans for fix_services
-  if is_string($fix_services) == false {
+  if is_bool($fix_services) {
     $fix_services_real = $fix_services
   } else {
     $fix_services_real = str2bool($fix_services)
@@ -164,17 +178,24 @@ class ltscore (
           'novell-iprint-listener', 'abrtd' ]
       }
       default: {
-        fail( "Can not handle ${::osfamily}-${::lsbmajdistrelease}. Only support RedHat 5&6, Suse 10&11." )
+        $disableservices = []
       }
     }
 
-    service { $disableservices :
-      enable => false,
+    case "${::osfamily}-${::lsbmajdistrelease}" {
+      'Suse-10', 'Suse-11', 'Redhat-5', 'Redhat-6': {
+        service { $disableservices :
+          enable => false,
+        }
+      }
+      default: {
+        fail( "fix_services is only supported on Redhat 5&6, Suse 10&11." )
+      }
     }
   }
 
 # convert stringified booleans for fix_swappiness
-  if is_string($fix_swappiness) == false {
+  if is_bool($fix_swappiness) {
     $fix_swappiness_real = $fix_swappiness
   } else {
     $fix_swappiness_real = str2bool($fix_swappiness)
@@ -182,33 +203,56 @@ class ltscore (
 
 # Default value for fix_swappiness is 30
   if $fix_swappiness_real == true {
-    exec { 'swappiness':
-      command => "/bin/echo ${fix_swappiness_value} > /proc/sys/vm/swappiness",
-      path    => '/bin:/usr/bin',
-      unless  => "/bin/grep '^${fix_swappiness_value}$' /proc/sys/vm/swappiness",
+    case "${::osfamily}-${::lsbmajdistrelease}" {
+      'Suse-10', 'Suse-11', 'Redhat-5', 'Redhat-6': {
+        exec { 'swappiness':
+          command => "/bin/echo ${fix_swappiness_value} > /proc/sys/vm/swappiness",
+          path    => '/bin:/usr/bin',
+          unless  => "/bin/grep '^${fix_swappiness_value}$' /proc/sys/vm/swappiness",
+	}
+      }
+      default: {
+        fail( "fix_swappiness is only supported on Redhat 5&6, Suse 10&11." )
+      }
     }
   }
 
 # $::is_virtual == 'true' works.  $::is_virtual == true not work. Because it's a 'fact'.
 # So convert stringified $::is_virtual to booleans $is_virtual_real
-  if is_string($::is_virtual) == false {
+  if is_bool($::is_virtual) {
     $is_virtual_real = $::is_virtual
   } else {
     $is_virtual_real = str2bool( $::is_virtual )
   }
 
 # convert stringified booleans for fix_systohc_for_vm
-  if is_string($fix_systohc_for_vm) == false {
+  if is_bool($fix_systohc_for_vm) {
     $fix_systohc_for_vm_real = $fix_systohc_for_vm
   } else {
     $fix_systohc_for_vm_real = str2bool($fix_systohc_for_vm)
   }
 
-  if ( $fix_systohc_for_vm_real == true ) and ( $::osfamily == 'Suse' ) and ( $is_virtual_real == true ) {
-    exec { 'fix_systohc_for_vm' :
-      command => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
-      path    => '/bin:/usr/bin',
-      onlyif  => 'grep SYSTOHC=.*yes.* /etc/sysconfig/clock',
+  if ( $fix_systohc_for_vm_real == true ) {
+    if ( $::osfamily == 'Suse' and $::lsbmajdistrelease == '10' ) or ( $::osfamily == 'Suse' and $::lsbmajdistrelease == '11' ) {
+#    case "${::osfamily}-${::lsbmajdistrelease}" {
+#      'Suse-10', 'Suse-11': {
+        if ( $is_virtual_real == true ) {
+          exec { 'fix_systohc_for_vm' :
+            command => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
+            path    => '/bin:/usr/bin',
+            onlyif  => 'grep SYSTOHC=.*yes.* /etc/sysconfig/clock',
+          }
+	}
+        else {
+          fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
+        }
+#     }
+#      default: {
+#        fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
+#      }
+    }
+    else {
+      fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
     }
   }
 
