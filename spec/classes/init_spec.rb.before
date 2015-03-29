@@ -446,9 +446,9 @@ describe 'ltscore' do
     end
   end
 
-# should fail on invalid types tests
-  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
+
 # <fix_access_to_alsa should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
     context "When fix_access_to_alsa set to invalid #{value} (as #{value.class}) on supported OS" do
       let (:params) { { :fix_access_to_alsa => value } }
       let :facts do
@@ -463,9 +463,11 @@ describe 'ltscore' do
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
+  end
 # </fix_access_to_alsa should fail on invalid types>
 
 # <fix_haldaemon should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
     context "When fix_haldaemon set to invalid #{value} (as #{value.class}) on supported OS" do
       let (:params) { { :fix_haldaemon => value } }
       let :facts do
@@ -480,9 +482,11 @@ describe 'ltscore' do
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
+  end
 # </fix_haldaemon should fail on invalid types>
 
 # <fix_localscratch should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
     context "When fix_localscratch set to invalid #{value} (as #{value.class}) on supported OS" do
       let (:params) { { :fix_localscratch => value } }
       let :facts do
@@ -497,9 +501,11 @@ describe 'ltscore' do
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
+  end
 # </fix_localscratch should fail on invalid types>
 
 # <fix_messages_permission should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
     context "When fix_messages_permission set to invalid #{value} (as #{value.class}) on supported OS" do
       let (:params) { { :fix_messages_permission => value } }
       let :facts do
@@ -514,9 +520,11 @@ describe 'ltscore' do
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
+  end
 # </fix_messages_permission should fail on invalid types>
 
 # <fix_services should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
     context "When fix_services set to invalid #{value} (as #{value.class}) on supported OS" do
       let (:params) { { :fix_services => value } }
       let :facts do
@@ -531,9 +539,11 @@ describe 'ltscore' do
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
+  end
 # </fix_services should fail on invalid types>
 
 # <fix_swappiness should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
     context "When fix_swappiness set to invalid #{value} (as #{value.class}) on supported OS" do
       let (:params) { { :fix_swappiness => value } }
       let :facts do
@@ -548,9 +558,11 @@ describe 'ltscore' do
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
+  end
 # </fix_swappiness should fail on invalid types>
 
 # <fix_systohc_for_vm should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
     context "When fix_systohc_for_vm set to invalid #{value} (as #{value.class}) on supported OS" do
       let (:params) { { :fix_systohc_for_vm => value } }
       let :facts do
@@ -565,9 +577,11 @@ describe 'ltscore' do
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
+  end
 # </fix_systohc_for_vm should fail on invalid types>
 
 # <fix_updatedb should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
     context "When fix_updatedb set to invalid #{value} (as #{value.class}) on supported OS" do
       let (:params) { { :fix_updatedb => value } }
       let :facts do
@@ -582,9 +596,11 @@ describe 'ltscore' do
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
+  end
 # </fix_updatedb should fail on invalid types>
 
 # <fix_xinetd should fail on invalid types>
+  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
     context "When fix_xinetd set to invalid #{value} (as #{value.class}) on supported OS" do
       let (:params) { { :fix_xinetd => value } }
       let :facts do
@@ -599,7 +615,44 @@ describe 'ltscore' do
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
-# </fix_xinetd should fail on invalid types>
   end
+# </fix_xinetd should fail on invalid types>
+
+
+#  context 'When fix_xinetd set to true' do
+#    let(:params) { { :fix_xinetd => true } }
+#    it do
+#      should contain_package('xinetd').with({
+#       'ensure' => 'installed',
+#       'before' => 'File[/etc/xinetd.d/echo]',
+#      })
+#    end
+#    it do
+#      should contain_file('/etc/xinetd.d/echo').with({
+#        'ensure'  => 'file',
+#        'owner'   => 'root',
+#        'group'   => 'root',
+#        'mode'    => '0644',
+#        'notify'  => 'Exec[fix_xinetd]',
+#      })
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^# This file is managed by Puppet and any changes may be destroyed.$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^# description: An echo server. This is the tcp version.$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^service echo$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^\{$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^        type            = INTERNAL$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^        id              = echo-stream$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^        socket_type     = stream$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^        protocol        = tcp$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^        user            = root$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^        wait            = no$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^        FLAGS           = IPv6 IPv4$/)
+#      should contain_file('/etc/xinetd.d/echo').with_content(/^\}$/)
+#      should contain_exec('fix_xinetd').with({
+#        'command'     => '/sbin/service xinetd restart',
+#        'refreshonly' => true,
+#      })
+#    end
+#  end
 
 end
+

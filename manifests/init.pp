@@ -233,9 +233,9 @@ class ltscore (
   }
 
   if ( $fix_systohc_for_vm_real == true ) {
-    if ( $::osfamily == 'Suse' and $::lsbmajdistrelease == '10' ) or ( $::osfamily == 'Suse' and $::lsbmajdistrelease == '11' ) {
-#    case "${::osfamily}-${::lsbmajdistrelease}" {
-#      'Suse-10', 'Suse-11': {
+#    if ( $::osfamily == 'Suse' and $::lsbmajdistrelease == '10' ) or ( $::osfamily == 'Suse' and $::lsbmajdistrelease == '11' ) {
+    case "${::osfamily}-${::lsbmajdistrelease}" {
+      'Suse-10', 'Suse-11': {
         if ( $is_virtual_real == true ) {
           exec { 'fix_systohc_for_vm' :
             command => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
@@ -246,34 +246,41 @@ class ltscore (
         else {
           fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
         }
-#     }
-#      default: {
-#        fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
-#      }
-    }
-    else {
-      fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
+      }
+      default: {
+        fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
+      }
+#    }
+#    else {
+#      fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
     }
   }
 
 # convert stringified booleans for fix_updatedb
-  if is_string($fix_updatedb) == false {
+  if is_bool($fix_updatedb) {
     $fix_updatedb_real = $fix_updatedb
   } else {
     $fix_updatedb_real = str2bool($fix_updatedb)
   }
 
 # Disable updatedb in /etc/sysconfig/locate
-  if ( $fix_updatedb_real == true ) and ( $::osfamily == 'Suse' ) {
-    exec { 'fix_updatedb':
-      command => 'sed -i \'s/RUN_UPDATEDB=.*yes.*/RUN_UPDATEDB=no/\' /etc/sysconfig/locate',
-      path    => '/bin:/usr/bin',
-      onlyif  => 'grep RUN_UPDATEDB=.*yes.* /etc/sysconfig/locate',
+  if ( $fix_updatedb_real == true ) {
+    case "${::osfamily}-${::lsbmajdistrelease}" {
+      'Suse-10', 'Suse-11': {
+        exec { 'fix_updatedb':
+          command => 'sed -i \'s/RUN_UPDATEDB=.*yes.*/RUN_UPDATEDB=no/\' /etc/sysconfig/locate',
+          path    => '/bin:/usr/bin',
+          onlyif  => 'grep RUN_UPDATEDB=.*yes.* /etc/sysconfig/locate',
+        }
+	  }
+      default: {
+        fail("fix_updatedb is only supported on Suse 10&11.")
+      }
     }
   }
 
 # convert stringified booleans for fix_xinetd
-  if is_string($fix_xinetd) == false {
+  if is_bool($fix_xinetd) {
     $fix_xinetd_real = $fix_xinetd
   } else {
     $fix_xinetd_real = str2bool($fix_xinetd)
@@ -281,23 +288,28 @@ class ltscore (
 
 #Fix xinetd service
   if $fix_xinetd_real == true {
-    package { 'xinetd':
-      ensure => 'installed',
-      before => 'File[/etc/xinetd.d/echo]',
-    }
-    file { '/etc/xinetd.d/echo':
-      ensure  => 'file',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      content => template('ltscore/xinetd_d_echo.erb'),
-      notify  => 'Exec[fix_xinetd]',
-    }
-    exec { 'fix_xinetd':
-      command     => '/sbin/service xinetd restart',
-      refreshonly => true,
+    case "${::osfamily}-${::lsbmajdistrelease}" {
+      'Suse-10', 'Suse-11', 'Redhat-5', 'Redhat-6': {
+        package { 'xinetd':
+          ensure => 'installed',
+          before => 'File[/etc/xinetd.d/echo]',
+        }
+        file { '/etc/xinetd.d/echo':
+          ensure  => 'file',
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644',
+          content => template('ltscore/xinetd_d_echo.erb'),
+          notify  => 'Exec[fix_xinetd]',
+        }
+        exec { 'fix_xinetd':
+          command     => '/sbin/service xinetd restart',
+          refreshonly => true,
+        }
+      }
+      default: {
+        fail("fix_xinetd is only supported on Redhat 5&6, Suse 10&11.")
+      }
     }
   }
-
 }
-
