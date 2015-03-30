@@ -137,7 +137,7 @@ describe 'ltscore' do
             it 'should fail' do
               expect {
                 should
-              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on Redhat 5\&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5\&6, Suse 10\&11./)
             end
           end
         end
@@ -169,7 +169,7 @@ describe 'ltscore' do
             it 'should fail' do
               expect {
                 should
-              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on Redhat 5\&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5\&6, Suse 10\&11./)
             end
           end
         end
@@ -197,7 +197,7 @@ describe 'ltscore' do
             it 'should fail' do
               expect {
                 should
-              }.to raise_error(Puppet::Error,/fix_messages_permission is only supported on Redhat 5\&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_messages_permission is only supported on RedHat 5\&6, Suse 10\&11./)
             end
           end
         end
@@ -247,7 +247,7 @@ describe 'ltscore' do
             it 'should fail' do
               expect {
                 should
-              }.to raise_error(Puppet::Error, /fix_services is only supported on Redhat 5\&6, Suse 10\&11./ )
+              }.to raise_error(Puppet::Error, /fix_services is only supported on RedHat 5\&6, Suse 10\&11./ )
             end
           end
         end
@@ -277,7 +277,7 @@ describe 'ltscore' do
             it 'should fail' do
               expect {
                 should
-              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on Redhat 5\&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5\&6, Suse 10\&11./)
             end
           end
         end
@@ -306,7 +306,7 @@ describe 'ltscore' do
             it 'should fail' do
               expect {
                 should
-              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on Redhat 5\&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5\&6, Suse 10\&11./)
             end
           end
         end
@@ -319,7 +319,9 @@ describe 'ltscore' do
           [true,'true',false,'false'].each do |value_virtual|
             context "with is_virtual set to valid #{value_virtual} (as #{value_virtual.class})" do
               let :facts do
-                { :is_virtual => value_virtual,
+                { :osfamily          => v[:os],
+                  :lsbmajdistrelease => v[:rel],
+                  :is_virtual => value_virtual,
                 }
               end
               let :params do
@@ -327,7 +329,7 @@ describe 'ltscore' do
                 }
               end
               if ( value == true or value == 'true' ) and v[:systohc_for_vm] == true
-                if ( value_virtual ==true or value_virtual == 'true' )
+                if ( value_virtual == true or value_virtual == 'true' )
                   it do
                     should contain_exec('fix_systohc_for_vm').with({
                       'command' => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
@@ -436,7 +438,7 @@ describe 'ltscore' do
             it 'should fail' do
               expect {
                 should
-              }.to raise_error(Puppet::Error,/fix_xinetd is only supported on Redhat 5&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_xinetd is only supported on RedHat 5&6, Suse 10\&11./)
             end
           end
         end

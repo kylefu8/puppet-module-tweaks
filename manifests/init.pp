@@ -1,3 +1,7 @@
+# == Class: ltscore
+#
+# Linux Terminal Server related tweaks.
+#
 class ltscore (
   $fix_access_to_alsa          = false,
   $fix_haldaemon               = false,
@@ -34,7 +38,7 @@ class ltscore (
         }
       }
       default: {
-        fail("fix_access_to_alsa is only supported on Suse 10&11.")
+        fail('fix_access_to_alsa is only supported on Suse 10&11.')
       }
     }
   }
@@ -63,7 +67,7 @@ class ltscore (
         }
       }
       default: {
-        fail("fix_haldaemon is only supported on Suse 11.")
+        fail('fix_haldaemon is only supported on Suse 11.')
       }
     }
   }
@@ -83,7 +87,7 @@ class ltscore (
     $fix_localscratch_real = str2bool($fix_localscratch)
   }
 
-# Puppet has a 'bug' on directory creation. When the parent directory is not existed, Puppet will report error. 
+# Puppet has a 'bug' on directory creation. When the parent directory is not existed, Puppet will report error.
 # If you changed $fix_localscratchpath, please read following pages first.
 # http://www.puppetcookbook.com/posts/creating-a-directory.html
 # http://www.puppetcookbook.com/posts/creating-a-directory-tree.html
@@ -91,7 +95,7 @@ class ltscore (
 # Update 2014.12.01: Fixed by common::mkdir_p from Garrett Honeycutt
   if ( $fix_localscratch_real == true ) {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11', 'Redhat-5', 'Redhat-6': {
+      'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
         common::mkdir_p { $fix_localscratch_path: }
 
         file { 'fix_localscratch_path':
@@ -104,7 +108,7 @@ class ltscore (
         }
       }
       default: {
-        fail("fix_localscratch is only supported on Redhat 5&6, Suse 10&11.")
+        fail('fix_localscratch is only supported on RedHat 5&6, Suse 10&11.')
       }
     }
   }
@@ -119,13 +123,13 @@ class ltscore (
 # Set /var/log/messages to 0644
   if $fix_messages_permission_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11', 'Redhat-5', 'Redhat-6': {
+      'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
         file { '/var/log/messages' :
           mode => '0644',
         }
       }
       default: {
-        fail("fix_messages_permission is only supported on Redhat 5&6, Suse 10&11.")
+        fail('fix_messages_permission is only supported on RedHat 5&6, Suse 10&11.')
       }
     }
   }
@@ -137,7 +141,7 @@ class ltscore (
     $fix_services_real = str2bool($fix_services)
   }
 
-# Disable services on Suse and Redhat
+# Disable services on Suse and RedHat
   if $fix_services_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
       'Suse-11': {
@@ -183,13 +187,13 @@ class ltscore (
     }
 
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11', 'Redhat-5', 'Redhat-6': {
+      'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
         service { $disableservices :
           enable => false,
         }
       }
       default: {
-        fail( "fix_services is only supported on Redhat 5&6, Suse 10&11." )
+        fail('fix_services is only supported on RedHat 5&6, Suse 10&11.')
       }
     }
   }
@@ -204,21 +208,22 @@ class ltscore (
 # Default value for fix_swappiness is 30
   if $fix_swappiness_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11', 'Redhat-5', 'Redhat-6': {
+      'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
         exec { 'swappiness':
           command => "/bin/echo ${fix_swappiness_value} > /proc/sys/vm/swappiness",
           path    => '/bin:/usr/bin',
           unless  => "/bin/grep '^${fix_swappiness_value}$' /proc/sys/vm/swappiness",
-	}
+        }
       }
       default: {
-        fail( "fix_swappiness is only supported on Redhat 5&6, Suse 10&11." )
+        fail('fix_swappiness is only supported on RedHat 5&6, Suse 10&11.')
       }
     }
   }
 
 # $::is_virtual == 'true' works.  $::is_virtual == true not work. Because it's a 'fact'.
 # So convert stringified $::is_virtual to booleans $is_virtual_real
+# convert stringified booleans for is_virtual
   if is_bool($::is_virtual) {
     $is_virtual_real = $::is_virtual
   } else {
@@ -233,26 +238,22 @@ class ltscore (
   }
 
   if ( $fix_systohc_for_vm_real == true ) {
-#    if ( $::osfamily == 'Suse' and $::lsbmajdistrelease == '10' ) or ( $::osfamily == 'Suse' and $::lsbmajdistrelease == '11' ) {
-    case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11': {
-        if ( $is_virtual_real == true ) {
+    if ( $is_virtual_real == true ) {
+      case "${::osfamily}-${::lsbmajdistrelease}" {
+        'Suse-10', 'Suse-11': {
           exec { 'fix_systohc_for_vm' :
             command => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
             path    => '/bin:/usr/bin',
             onlyif  => 'grep SYSTOHC=.*yes.* /etc/sysconfig/clock',
           }
-	}
-        else {
-          fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
+        }
+        default: {
+          fail('fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.')
         }
       }
-      default: {
-        fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
-      }
-#    }
-#    else {
-#      fail("fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.")
+    }
+    else {
+      fail('fix_systohc_for_vm is only supported on Suse 10&11 Virtual Machine.')
     }
   }
 
@@ -272,9 +273,9 @@ class ltscore (
           path    => '/bin:/usr/bin',
           onlyif  => 'grep RUN_UPDATEDB=.*yes.* /etc/sysconfig/locate',
         }
-	  }
+      }
       default: {
-        fail("fix_updatedb is only supported on Suse 10&11.")
+        fail('fix_updatedb is only supported on Suse 10&11.')
       }
     }
   }
@@ -289,7 +290,7 @@ class ltscore (
 #Fix xinetd service
   if $fix_xinetd_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11', 'Redhat-5', 'Redhat-6': {
+      'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
         package { 'xinetd':
           ensure => 'installed',
           before => 'File[/etc/xinetd.d/echo]',
@@ -308,7 +309,7 @@ class ltscore (
         }
       }
       default: {
-        fail("fix_xinetd is only supported on Redhat 5&6, Suse 10&11.")
+        fail('fix_xinetd is only supported on RedHat 5&6, Suse 10&11.')
       }
     }
   }
