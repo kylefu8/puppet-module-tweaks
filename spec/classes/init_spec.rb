@@ -394,6 +394,7 @@ describe 'ltscore' do
 # <fix_xinetd functionality & stringified bools handling>
       [true,'true',false,'false'].each do |value|
         context "with fix_xinetd set to valid #{value} (as #{value.class})" do
+          echo_fixture = File.read(fixtures("xinetd_d_echo"))
           let :params do
             { :fix_xinetd => value,
             }
@@ -413,18 +414,7 @@ describe 'ltscore' do
                 'mode'    => '0644',
                 'notify'  => 'Exec[fix_xinetd]',
               })
-              should contain_file('/etc/xinetd.d/echo').with_content(/^# This file is managed by Puppet and any changes may be destroyed.$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^# description: An echo server. This is the tcp version.$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^service echo$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^\{$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^        type            = INTERNAL$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^        id              = echo-stream$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^        socket_type     = stream$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^        protocol        = tcp$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^        user            = root$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^        wait            = no$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^        FLAGS           = IPv6 IPv4$/)
-              should contain_file('/etc/xinetd.d/echo').with_content(/^\}$/)
+              should contain_file('/etc/xinetd.d/echo').with_content(echo_fixture)
               should contain_exec('fix_xinetd').with({
                 'command'     => '/sbin/service xinetd restart',
                 'refreshonly' => true,
