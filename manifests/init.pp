@@ -5,7 +5,6 @@
 class ltscore (
   $fix_access_to_alsa          = false,
   $fix_haldaemon               = false,
-#  $fix_interval_ssh            = true,
   $fix_localscratch            = false,
   $fix_localscratch_path       = '/local/scratch',
   $fix_messages_permission     = false,
@@ -72,14 +71,6 @@ class ltscore (
     }
   }
 
-# Handled by ssh module
-#  if ($fix_interval_ssh == true ) and ("${::operatingsystem}${::lsbmajdistrelease}" =~ /SLES11|SLED11/ ) {
-#    exec { 'echo "ServerAliveInterval 240" >> /etc/ssh/ssh_config' :
-#      path => '/bin:/usr/bin:',
-#      unless => "grep ServerAliveInterval /etc/ssh/ssh_config",
-#    }
-#  }
-
 # convert stringified booleans for fix_localscratch
   if is_bool($fix_localscratch) {
     $fix_localscratch_real = $fix_localscratch
@@ -87,12 +78,7 @@ class ltscore (
     $fix_localscratch_real = str2bool($fix_localscratch)
   }
 
-# Puppet has a 'bug' on directory creation. When the parent directory is not existed, Puppet will report error.
-# If you changed $fix_localscratchpath, please read following pages first.
-# http://www.puppetcookbook.com/posts/creating-a-directory.html
-# http://www.puppetcookbook.com/posts/creating-a-directory-tree.html
-# https://projects.puppetlabs.com/issues/86
-# Update 2014.12.01: Fixed by common::mkdir_p from Garrett Honeycutt
+# create localscratch path and permissions
   if ( $fix_localscratch_real == true ) {
     case "${::osfamily}-${::lsbmajdistrelease}" {
       'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
@@ -145,41 +131,88 @@ class ltscore (
   if $fix_services_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
       'Suse-11': {
-        $disableservices = [ 'microcode.ctl', 'smartd',
-          'boot.open-iscsi', 'libvirtd',
-          'acpid', 'namcd', 'smbfs',
-          'splash', 'avahi-daemon', 'bluez-coldplug',
-          'fbset', 'network-remotefs', 'xdm',
-          'splash_early' ]
+        $disableservices = [
+          'acpid',
+          'avahi-daemon',
+          'bluez-coldplug',
+          'boot.open-iscsi',
+          'fbset',
+          'libvirtd',
+          'microcode.ctl',
+          'namcd',
+          'network-remotefs',
+          'smartd',
+          'smbfs',
+          'splash',
+          'splash_early',
+          'xdm',
+        ]
       }
       'Suse-10': {
-        $disableservices = [ 'smartd', 'owcimomd',
+        $disableservices = [
+          'acpid',
+          'avahi-daemon',
+          'fbset',
+          'hotkey-setup',
+          'microcode',
+          'namcd',
+          'owcimomd',
           'powersaved',
-          'acpid', 'namcd', 'smbfs',
-          'splash', 'avahi-daemon',
-          'fbset', 'xdm',
-          'suse-blinux', 'microcode',
-          'splash_early', 'hotkey-setup' ]
+          'smartd',
+          'smbfs',
+          'splash',
+          'splash_early',
+          'suse-blinux',
+          'xdm',
+        ]
       }
       'RedHat-5': {
-        $disableservices = [ 'owcimomd', 'microcode.ctl', 'smartd',
-          'boot.open-iscsi', 'libvirtd', 'powersaved',
-          'acpid', 'namcd', 'smbfs',
-          'splash', 'avahi-daemon', 'bluez-coldplug',
-          'fbset', 'network-remotefs', 'xdm',
+        $disableservices = [
+          'abrtd',
+          'acpid',
+          'avahi-daemon',
+          'bluez-coldplug',
+          'boot.open-iscsi',
+          'fbset',
+          'hotkey-setup',
+          'libvirtd',
+          'microcode.ctl',
+          'namcd',
+          'network-remotefs',
+          'novell-iprint-listener',
+          'owcimomd',
+          'powersaved',
+          'smartd',
+          'smbfs',
+          'splash',
           'splash_early',
-          'hotkey-setup', 'suse-blinux',
-          'novell-iprint-listener', 'abrtd' ]
+          'suse-blinux',
+          'xdm',
+        ]
       }
       'RedHat-6': {
-        $disableservices = [ 'owcimomd', 'microcode.ctl', 'smartd',
-          'boot.open-iscsi', 'libvirtd', 'powersaved',
-          'acpid', 'namcd', 'smbfs',
-          'splash', 'avahi-daemon', 'bluez-coldplug',
-          'fbset', 'network-remotefs', 'xdm',
+        $disableservices = [
+          'abrtd',
+          'acpid',
+          'avahi-daemon',
+          'bluez-coldplug',
+          'boot.open-iscsi',
+          'fbset',
+          'hotkey-setup',
+          'libvirtd',
+          'microcode.ctl',
+          'namcd',
+          'network-remotefs',
+          'novell-iprint-listener',
+          'owcimomd',
+          'powersaved',
+          'smartd',
+          'smbfs',
+          'splash',
           'splash_early',
-          'hotkey-setup', 'suse-blinux',
-          'novell-iprint-listener', 'abrtd' ]
+          'suse-blinux',
+          'xdm',
+        ]
       }
       default: {
         $disableservices = []

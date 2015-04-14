@@ -1,37 +1,32 @@
 require 'spec_helper'
 describe 'ltscore' do
 
+  describe 'with default values for all parameters' do
+    it { should compile.with_all_deps }
+    it { should contain_class('ltscore')}
+    it { should have_resource_count(0) }
+  end
+
   fixes = {
     'RedHat-5' => {
-      :os => 'RedHat', :rel => '5', :access_to_alsa => false, :haldaemon => false, :localscratch => true, :messages_permission => true, :services => true, :swappiness => true, :systohc_for_vm => false, :updatedb => false, :xinetd => true,
-      :servicelist => [ 'owcimomd', 'microcode.ctl', 'smartd',
-        'boot.open-iscsi', 'libvirtd', 'powersaved', 'acpid', 'namcd',
-        'smbfs', 'splash', 'avahi-daemon', 'bluez-coldplug', 'fbset',
-        'network-remotefs', 'xdm', 'splash_early', 'hotkey-setup',
-        'suse-blinux', 'novell-iprint-listener', 'abrtd' ],
+      :os => 'RedHat',  :rel => '5', :access_to_alsa => false,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => false, :updatedb => false, :xinetd => true,
+      :servicelist => [ 'abrtd', 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'hotkey-setup', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'novell-iprint-listener', 'owcimomd', 'powersaved', 'smartd', 'smbfs', 'splash', 'splash_early', 'suse-blinux', 'xdm', ],
     },
     'RedHat-6' => {
-      :os => 'RedHat', :rel => '6', :access_to_alsa => false, :haldaemon => false, :localscratch => true, :messages_permission => true, :services => true, :swappiness => true, :systohc_for_vm => false, :updatedb => false, :xinetd => true,
-      :servicelist => [ 'owcimomd', 'microcode.ctl', 'smartd',
-        'boot.open-iscsi', 'libvirtd', 'powersaved', 'acpid', 'namcd',
-        'smbfs', 'splash', 'avahi-daemon', 'bluez-coldplug', 'fbset',
-        'network-remotefs', 'xdm', 'splash_early', 'hotkey-setup',
-        'suse-blinux', 'novell-iprint-listener', 'abrtd' ],
+      :os => 'RedHat',  :rel => '6', :access_to_alsa => false,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => false, :updatedb => false, :xinetd => true,
+      :servicelist => [ 'abrtd', 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'hotkey-setup', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'novell-iprint-listener', 'owcimomd', 'powersaved', 'smartd', 'smbfs', 'splash', 'splash_early', 'suse-blinux', 'xdm', ],
     },
     'Suse-10' =>  {
-      :os => 'Suse',   :rel => '10', :access_to_alsa => true, :haldaemon => false, :localscratch => true, :messages_permission => true, :services => true, :swappiness => true, :systohc_for_vm => true, :updatedb => true, :xinetd => true,
-      :servicelist => [ 'smartd', 'owcimomd', 'powersaved', 'acpid',
-        'namcd', 'smbfs', 'splash', 'avahi-daemon', 'fbset', 'xdm',
-        'suse-blinux', 'microcode', 'splash_early', 'hotkey-setup' ],
+      :os => 'Suse',    :rel => '10', :access_to_alsa => true,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => true,  :xinetd => true,
+      :servicelist => [ 'acpid', 'avahi-daemon', 'fbset', 'hotkey-setup', 'microcode', 'namcd', 'owcimomd', 'powersaved', 'smartd', 'smbfs', 'splash', 'splash_early', 'suse-blinux', 'xdm', ],
     },
     'Suse-11' =>  {
-      :os => 'Suse',   :rel => '11', :access_to_alsa => true, :haldaemon => true, :localscratch => true, :messages_permission => true, :services => true, :swappiness => true, :systohc_for_vm => true, :updatedb => true, :xinetd => true,
-      :servicelist => [ 'microcode.ctl', 'smartd', 'boot.open-iscsi',
-        'libvirtd', 'acpid', 'namcd', 'smbfs', 'splash', 'avahi-daemon',
-        'bluez-coldplug', 'fbset', 'network-remotefs', 'xdm', 'splash_early' ],
+      :os => 'Suse',    :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => true,  :xinetd => true,
+      :servicelist => [ 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'smartd', 'smbfs', 'splash', 'splash_early', 'xdm', ],
     },
-    'Debian-12' =>  {
-      :os => 'Debian',   :rel => '12', :access_to_alsa => false, :haldaemon => false, :localscratch => false, :messages_permission => false, :services => false, :swappiness => false, :systohc_for_vm => false, :updatedb => false, :xinetd => false,
+    # not existing OS
+    'WierdOS-12' =>  {
+      :os => 'WierdOS', :rel => '12', :access_to_alsa => false, :haldaemon => false, :localscratch => false, :messages_permission => false, :services => false, :swappiness => false, :systohc_for_vm => false, :updatedb => false, :xinetd => false,
       },
     }
 
@@ -50,7 +45,7 @@ describe 'ltscore' do
             { :fix_access_to_alsa => value,
             }
           end
-          if ( value == true or value == 'true' ) and v[:access_to_alsa] == true
+          if value.to_s == 'true' and v[:access_to_alsa] == true
             it do
               should contain_exec('fix_access_to_alsa').with({
                 'command' => 'sed -i \'s#NAME="snd/%k".*$#NAME="snd/%k",MODE="0666"#\' /etc/udev/rules.d/40-alsa.rules',
@@ -58,7 +53,7 @@ describe 'ltscore' do
                 'unless'  => 'test -f /etc/udev/rules.d/40-alsa.rules && grep "snd.*0666" /etc/udev/rules.d/40-alsa.rules',
               })
             end
-          elsif ( value == false or value == 'false' )
+          elsif value.to_s == 'false'
             it do
               should_not contain_exec('fix_access_to_alsa')
             end
@@ -80,7 +75,7 @@ describe 'ltscore' do
             { :fix_haldaemon => value,
             }
           end
-          if ( value == true or value == 'true' ) and v[:haldaemon] == true
+          if value.to_s == 'true' and v[:haldaemon] == true
             it do
               should contain_service('haldaemon').with({
                 'ensure' => 'running',
@@ -93,7 +88,7 @@ describe 'ltscore' do
                 'notify'  => 'Service[haldaemon]',
               })
             end
-          elsif value == false or value == 'false'
+          elsif value.to_s == 'false'
             it do
               should_not contain_service('haldaemon')
             end
@@ -118,7 +113,7 @@ describe 'ltscore' do
             { :fix_localscratch => value,
             }
           end
-          if ( value == true or value == 'true' ) and v[:localscratch] == true
+          if value.to_s == 'true' and v[:localscratch] == true
             it do
               should contain_file('fix_localscratch_path').with({
                 'ensure'  => 'directory',
@@ -129,7 +124,7 @@ describe 'ltscore' do
                 'require' => 'Common::Mkdir_p[/local/scratch]',
               })
             end
-          elsif ( value == false or value == 'false' )
+          elsif value.to_s == 'false'
             it do
               should_not contain_file('fix_localscratch_path')
             end
@@ -150,7 +145,7 @@ describe 'ltscore' do
               :fix_localscratch_path => '/local/test',
             }
           end
-          if ( value == true or value == 'true' ) and v[:localscratch] == true
+          if value.to_s == 'true' and v[:localscratch] == true
             it do
               should contain_file('fix_localscratch_path').with({
                 'ensure'  => 'directory',
@@ -161,7 +156,7 @@ describe 'ltscore' do
                 'require' => 'Common::Mkdir_p[/local/test]',
               })
             end
-          elsif ( value == false or value == 'false' )
+          elsif value.to_s == 'false'
             it do
               should_not contain_file('fix_localscratch_path')
             end
@@ -183,13 +178,13 @@ describe 'ltscore' do
             { :fix_messages_permission => value,
             }
           end
-          if ( value == true or value == 'true' ) and v[:messages_permission] == true
+          if value.to_s == 'true' and v[:messages_permission] == true
             it do
               should contain_file('/var/log/messages').with({
                 'mode'    => '0644',
               })
             end
-          elsif ( value == false or value == 'false' )
+          elsif value.to_s == 'false'
             it do
               should_not contain_file('/var/log/messages')
             end
@@ -211,7 +206,7 @@ describe 'ltscore' do
             { :fix_services => value,
             }
           end
-          if ( value == true or value == 'true' ) and v[:services] == true
+          if value.to_s == 'true' and v[:services] == true
             if v[:servicelist].class == Array
               v[:servicelist].each do |srv|
                 it {
@@ -227,7 +222,7 @@ describe 'ltscore' do
                 })
               }
             end
-          elsif ( value == false or value == 'false' )
+          elsif value.to_s == 'false'
             if v[:servicelist].class == Array
               v[:servicelist].each do |srv|
                 it {
@@ -261,7 +256,7 @@ describe 'ltscore' do
             { :fix_swappiness => value,
             }
           end
-          if ( value == true or value == 'true' ) and v[:localscratch] == true
+          if value.to_s == 'true' and v[:localscratch] == true
             it do
               should contain_exec('swappiness').with({
                 'command' => "/bin/echo 30 > /proc/sys/vm/swappiness",
@@ -269,7 +264,7 @@ describe 'ltscore' do
                 'unless'  => "/bin/grep '^30$' /proc/sys/vm/swappiness",
               })
             end
-          elsif ( value == false or value == 'false' )
+          elsif value.to_s == 'false'
             it do
               should_not contain_exec('swappiness')
             end
@@ -290,7 +285,7 @@ describe 'ltscore' do
               :fix_swappiness_value => 60,
             }
           end
-          if ( value == true or value == 'true' ) and v[:localscratch] == true
+          if value.to_s == 'true' and v[:localscratch] == true
             it do
               should contain_exec('swappiness').with({
                 'command' => "/bin/echo 60 > /proc/sys/vm/swappiness",
@@ -298,7 +293,7 @@ describe 'ltscore' do
                 'unless'  => "/bin/grep '^60$' /proc/sys/vm/swappiness",
               })
             end
-          elsif ( value == false or value == 'false' )
+          elsif value.to_s == 'false'
             it do
               should_not contain_exec('swappiness')
             end
@@ -328,7 +323,7 @@ describe 'ltscore' do
                 { :fix_systohc_for_vm => value,
                 }
               end
-              if ( value == true or value == 'true' ) and v[:systohc_for_vm] == true
+              if value.to_s == 'true' and v[:systohc_for_vm] == true
                 if ( value_virtual == true or value_virtual == 'true' )
                   it do
                     should contain_exec('fix_systohc_for_vm').with({
@@ -337,14 +332,14 @@ describe 'ltscore' do
                       'onlyif'  => 'grep SYSTOHC=.*yes.* /etc/sysconfig/clock',
                     })
                   end
-		else
+                else
                   it 'should fail' do
                     expect {
                       should
                     }.to raise_error(Puppet::Error,/fix_systohc_for_vm is only supported on Suse 10\&11 Virtual Machine./)
                   end
-		end
-              elsif ( value == false or value == 'false' )
+                end
+              elsif value.to_s == 'false'
                 it do
                   should_not contain_exec('fix_systohc_for_vm')
                 end
@@ -357,7 +352,7 @@ describe 'ltscore' do
               end
             end
           end
-	end
+        end
       end
 # </fix_systohc_for_vm functionality & stringified bools handling>
 
@@ -368,7 +363,7 @@ describe 'ltscore' do
             { :fix_updatedb => value,
             }
           end
-          if ( value == true or value == 'true' ) and v[:updatedb] == true
+          if value.to_s == 'true' and v[:updatedb] == true
             it do
               should contain_exec('fix_updatedb').with({
                 'command' => 'sed -i \'s/RUN_UPDATEDB=.*yes.*/RUN_UPDATEDB=no/\' /etc/sysconfig/locate',
@@ -376,7 +371,7 @@ describe 'ltscore' do
                 'onlyif'  => 'grep RUN_UPDATEDB=.*yes.* /etc/sysconfig/locate',
               })
             end
-          elsif ( value == false or value == 'false' )
+          elsif value.to_s == 'false'
             it do
               should_not contain_exec('fix_updatedb')
             end
@@ -399,7 +394,7 @@ describe 'ltscore' do
             { :fix_xinetd => value,
             }
           end
-          if ( value == true or value == 'true' ) and v[:xinetd] == true
+          if value.to_s == 'true' and v[:xinetd] == true
             it do
               should contain_package('xinetd').with({
                'ensure' => 'installed',
@@ -420,7 +415,7 @@ describe 'ltscore' do
                 'refreshonly' => true,
               })
             end
-          elsif ( value == false or value == 'false' )
+          elsif value.to_s == 'false'
             it do
               should_not contain_exec('fix_xinetd')
             end
