@@ -1,0 +1,59 @@
+{
+  "name": "kylefu8-ltscore",
+  "version": "0.0.1",
+  "author": "kylefu8",
+  "summary": "LTS setting and tweaks",
+  "license": "Apache-2.0",
+  "source": "git@github.com:kylefu8/puppet-module-ltscore.git",
+  "project_page": "https://github.com/kylefu8/puppet-module-ltscore",
+  "issues_url": "https://github.com/kylefu8/puppet-module-ltscore/issues",
+  "description": "Linux Terminal Server related setting and tweak",
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": "3.2.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    },
+    {
+      "name": "facter",
+      "version_requirement": ">= 1.7.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5",
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "5",
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "10",
+        "11"
+      ]
+    },
+    {
+      "operatingsystem": "SLED",
+      "operatingsystemrelease": [
+        "10",
+        "11"
+      ]
+    }
+  ],
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.2.0"},
+    {"name":"ghoneycutt/common","version_requirement":">= 1.0.0"}
+  ]
+}
