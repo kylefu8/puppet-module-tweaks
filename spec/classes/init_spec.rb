@@ -60,8 +60,8 @@ describe 'ltscore' do
           else
             it 'should fail' do
               expect {
-                should
-              }.to raise_error(Puppet::Error,/fix_access_to_alsa is only supported on Suse 10\&11./)
+                should contain_class('ltscore')
+              }.to raise_error(Puppet::Error,/fix_access_to_alsa is only supported on Suse 10\&11\./)
             end
           end
         end
@@ -98,8 +98,8 @@ describe 'ltscore' do
           else
             it 'should fail' do
               expect {
-                should
-              }.to raise_error(Puppet::Error,/fix_haldaemon is only supported on Suse 11./)
+                should contain_class('ltscore')
+              }.to raise_error(Puppet::Error,/fix_haldaemon is only supported on Suse 11\./)
             end
           end
         end
@@ -131,8 +131,8 @@ describe 'ltscore' do
           else
             it 'should fail' do
               expect {
-                should
-              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5\&6, Suse 10\&11./)
+                should contain_class('ltscore')
+              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5\&6, Suse 10\&11\./)
             end
           end
         end
@@ -163,8 +163,8 @@ describe 'ltscore' do
           else
             it 'should fail' do
               expect {
-                should
-              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5\&6, Suse 10\&11./)
+                should contain_class('ltscore')
+              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5\&6, Suse 10\&11\./)
             end
           end
         end
@@ -191,8 +191,8 @@ describe 'ltscore' do
           else
             it 'should fail' do
               expect {
-                should
-              }.to raise_error(Puppet::Error,/fix_messages_permission is only supported on RedHat 5\&6, Suse 10\&11./)
+                should contain_class('ltscore')
+              }.to raise_error(Puppet::Error,/fix_messages_permission is only supported on RedHat 5\&6, Suse 10\&11\./)
             end
           end
         end
@@ -241,8 +241,8 @@ describe 'ltscore' do
           else
             it 'should fail' do
               expect {
-                should
-              }.to raise_error(Puppet::Error, /fix_services is only supported on RedHat 5\&6, Suse 10\&11./ )
+                should contain_class('ltscore')
+              }.to raise_error(Puppet::Error, /fix_services is only supported on RedHat 5\&6, Suse 10\&11\./ )
             end
           end
         end
@@ -271,8 +271,8 @@ describe 'ltscore' do
           else
             it 'should fail' do
               expect {
-                should
-              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5\&6, Suse 10\&11./)
+                should contain_class('ltscore')
+              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5\&6, Suse 10\&11\./)
             end
           end
         end
@@ -300,8 +300,8 @@ describe 'ltscore' do
           else
             it 'should fail' do
               expect {
-                should
-              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5\&6, Suse 10\&11./)
+                should contain_class('ltscore')
+              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5\&6, Suse 10\&11\./)
             end
           end
         end
@@ -335,8 +335,8 @@ describe 'ltscore' do
                 else
                   it 'should fail' do
                     expect {
-                      should
-                    }.to raise_error(Puppet::Error,/fix_systohc_for_vm is only supported on Suse 10\&11 Virtual Machine./)
+                      should contain_class('ltscore')
+                    }.to raise_error(Puppet::Error,/fix_systohc_for_vm is only supported on Suse 10\&11 Virtual Machine\./)
                   end
                 end
               elsif value.to_s == 'false'
@@ -346,8 +346,8 @@ describe 'ltscore' do
               else
                 it 'should fail' do
                   expect {
-                    should
-                  }.to raise_error(Puppet::Error,/fix_systohc_for_vm is only supported on Suse 10\&11 Virtual Machine./)
+                    should contain_class('ltscore')
+                  }.to raise_error(Puppet::Error,/fix_systohc_for_vm is only supported on Suse 10\&11 Virtual Machine\./)
                 end
               end
             end
@@ -378,8 +378,8 @@ describe 'ltscore' do
           else
             it 'should fail' do
               expect {
-                should
-              }.to raise_error(Puppet::Error,/fix_updatedb is only supported on Suse 10\&11./)
+                should contain_class('ltscore')
+              }.to raise_error(Puppet::Error,/fix_updatedb is only supported on Suse 10\&11\./)
             end
           end
         end
@@ -422,8 +422,8 @@ describe 'ltscore' do
           else
             it 'should fail' do
               expect {
-                should
-              }.to raise_error(Puppet::Error,/fix_xinetd is only supported on RedHat 5&6, Suse 10\&11./)
+                should contain_class('ltscore')
+              }.to raise_error(Puppet::Error,/fix_xinetd is only supported on RedHat 5&6, Suse 10\&11\./)
             end
           end
         end
@@ -446,8 +446,8 @@ describe 'ltscore' do
 
       it 'should fail' do
         expect {
-          should
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+          should contain_class('ltscore')
+        }.to raise_error(Puppet::Error, /str2bool\(\):/)
       end
     end
 # </fix_access_to_alsa should fail on invalid types>
@@ -463,8 +463,8 @@ describe 'ltscore' do
 
       it 'should fail' do
         expect {
-          should
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+          should contain_class('ltscore')
+        }.to raise_error(Puppet::Error, /str2bool\(\):/)
       end
     end
 # </fix_haldaemon should fail on invalid types>
@@ -480,8 +480,8 @@ describe 'ltscore' do
 
       it 'should fail' do
         expect {
-          should
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+          should contain_class('ltscore')
+        }.to raise_error(Puppet::Error, /str2bool\(\):/)
       end
     end
 # </fix_localscratch should fail on invalid types>
@@ -497,8 +497,8 @@ describe 'ltscore' do
 
       it 'should fail' do
         expect {
-          should
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+          should contain_class('ltscore')
+        }.to raise_error(Puppet::Error, /str2bool\(\):/)
       end
     end
 # </fix_messages_permission should fail on invalid types>
@@ -514,8 +514,8 @@ describe 'ltscore' do
 
       it 'should fail' do
         expect {
-          should
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+          should contain_class('ltscore')
+        }.to raise_error(Puppet::Error, /str2bool\(\):/)
       end
     end
 # </fix_services should fail on invalid types>
@@ -531,8 +531,8 @@ describe 'ltscore' do
 
       it 'should fail' do
         expect {
-          should
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+          should contain_class('ltscore')
+        }.to raise_error(Puppet::Error, /str2bool\(\):/)
       end
     end
 # </fix_swappiness should fail on invalid types>
@@ -548,8 +548,8 @@ describe 'ltscore' do
 
       it 'should fail' do
         expect {
-          should
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+          should contain_class('ltscore')
+        }.to raise_error(Puppet::Error, /str2bool\(\):/)
       end
     end
 # </fix_systohc_for_vm should fail on invalid types>
@@ -565,8 +565,8 @@ describe 'ltscore' do
 
       it 'should fail' do
         expect {
-          should
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+          should contain_class('ltscore')
+        }.to raise_error(Puppet::Error, /str2bool\(\):/)
       end
     end
 # </fix_updatedb should fail on invalid types>
@@ -582,8 +582,8 @@ describe 'ltscore' do
 
       it 'should fail' do
         expect {
-          should
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+          should contain_class('ltscore')
+        }.to raise_error(Puppet::Error, /str2bool\(\):/)
       end
     end
 # </fix_xinetd should fail on invalid types>

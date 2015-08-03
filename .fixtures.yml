@@ -5,6 +5,6 @@ fixtures:
       ref: '4.2.0'
     common:
       repo: 'git://github.com/ghoneycutt/puppet-module-common.git'
-      ref: 'v1.0.0'
+      ref: 'v1.3.0'
   symlinks:
     ltscore: "#{source_dir}"
