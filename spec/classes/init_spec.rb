@@ -433,6 +433,37 @@ describe 'tweaks' do
     end
   end
 
+# <fix_services_services functionality & invalid type handling>
+      describe 'with fix_services_services set to valid array on supported OS' do
+        let(:facts) { {
+          :osfamily          => 'Suse',
+          :lsbmajdistrelease => '11',
+        } }
+        let(:params) { {
+          :fix_services          => true,
+          :fix_services_services => ['stop','service'],
+        } }
+        ['stop','service'].each do |service|
+          it { should contain_service(service).with_enable('false') }
+        end
+      end
+
+      ['invalid',true,nil,3,2.42,a={'ha'=>'sh'}].each do |service|
+        context "with fix_services_services set to invalid #{service} (as #{service.class}) on supported OS" do
+          let(:params) { {
+            :fix_services          => true,
+            :fix_services_services => service,
+          } }
+
+          it 'should fail' do
+            expect {
+              should contain_class(subject)
+            }.to raise_error(Puppet::Error,/is not an Array/)
+          end
+        end
+      end
+# </fix_services_services functionality & invalid type handling>
+
 # should fail on invalid types tests
   ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
 # <fix_access_to_alsa should fail on invalid types>

@@ -67,6 +67,12 @@ Nothing will happen with those services if it's false.
 
 - *Default*: false
 
+fix_services_services (array)
+-----------------------------
+Array of service names to disable when fix_services is activated. 'USE_DEFAULTS' will choose the appropriate default for the used OS.
+
+- *Default*: 'USE_DEFAULTS'
+
 fix_swappiness (boolean)
 ------------------------
 Set parameter that controls the relative weight given to swapping out runtime memory if it's true.
