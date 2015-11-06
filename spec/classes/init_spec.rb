@@ -60,7 +60,7 @@ describe 'tweaks' do
           else
             it 'should fail' do
               expect {
-                should
+                should contain_class('tweaks')
               }.to raise_error(Puppet::Error,/fix_access_to_alsa is only supported on Suse 10\&11./)
             end
           end
@@ -98,7 +98,7 @@ describe 'tweaks' do
           else
             it 'should fail' do
               expect {
-                should
+                should contain_class('tweaks')
               }.to raise_error(Puppet::Error,/fix_haldaemon is only supported on Suse 11./)
             end
           end
@@ -131,7 +131,7 @@ describe 'tweaks' do
           else
             it 'should fail' do
               expect {
-                should
+                should contain_class('tweaks')
               }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5\&6, Suse 10\&11./)
             end
           end
@@ -163,7 +163,7 @@ describe 'tweaks' do
           else
             it 'should fail' do
               expect {
-                should
+                should contain_class('tweaks')
               }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5\&6, Suse 10\&11./)
             end
           end
@@ -191,7 +191,7 @@ describe 'tweaks' do
           else
             it 'should fail' do
               expect {
-                should
+                should contain_class('tweaks')
               }.to raise_error(Puppet::Error,/fix_messages_permission is only supported on RedHat 5\&6, Suse 10\&11./)
             end
           end
@@ -241,7 +241,7 @@ describe 'tweaks' do
           else
             it 'should fail' do
               expect {
-                should
+                should contain_class('tweaks')
               }.to raise_error(Puppet::Error, /fix_services is only supported on RedHat 5\&6, Suse 10\&11./ )
             end
           end
@@ -271,7 +271,7 @@ describe 'tweaks' do
           else
             it 'should fail' do
               expect {
-                should
+                should contain_class('tweaks')
               }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5\&6, Suse 10\&11./)
             end
           end
@@ -300,7 +300,7 @@ describe 'tweaks' do
           else
             it 'should fail' do
               expect {
-                should
+                should contain_class('tweaks')
               }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5\&6, Suse 10\&11./)
             end
           end
@@ -335,7 +335,7 @@ describe 'tweaks' do
                 else
                   it 'should fail' do
                     expect {
-                      should
+                      should contain_class('tweaks')
                     }.to raise_error(Puppet::Error,/fix_systohc_for_vm is only supported on Suse 10\&11 Virtual Machine./)
                   end
                 end
@@ -346,7 +346,7 @@ describe 'tweaks' do
               else
                 it 'should fail' do
                   expect {
-                    should
+                    should contain_class('tweaks')
                   }.to raise_error(Puppet::Error,/fix_systohc_for_vm is only supported on Suse 10\&11 Virtual Machine./)
                 end
               end
@@ -378,7 +378,7 @@ describe 'tweaks' do
           else
             it 'should fail' do
               expect {
-                should
+                should contain_class('tweaks')
               }.to raise_error(Puppet::Error,/fix_updatedb is only supported on Suse 10\&11./)
             end
           end
@@ -422,7 +422,7 @@ describe 'tweaks' do
           else
             it 'should fail' do
               expect {
-                should
+                should contain_class('tweaks')
               }.to raise_error(Puppet::Error,/fix_xinetd is only supported on RedHat 5&6, Suse 10\&11./)
             end
           end
@@ -446,7 +446,7 @@ describe 'tweaks' do
 
       it 'should fail' do
         expect {
-          should
+          should contain_class('tweaks')
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
@@ -463,7 +463,7 @@ describe 'tweaks' do
 
       it 'should fail' do
         expect {
-          should
+          should contain_class('tweaks')
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
@@ -480,7 +480,7 @@ describe 'tweaks' do
 
       it 'should fail' do
         expect {
-          should
+          should contain_class('tweaks')
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
@@ -497,7 +497,7 @@ describe 'tweaks' do
 
       it 'should fail' do
         expect {
-          should
+          should contain_class('tweaks')
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
@@ -514,7 +514,7 @@ describe 'tweaks' do
 
       it 'should fail' do
         expect {
-          should
+          should contain_class('tweaks')
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
@@ -531,7 +531,7 @@ describe 'tweaks' do
 
       it 'should fail' do
         expect {
-          should
+          should contain_class('tweaks')
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
@@ -548,7 +548,7 @@ describe 'tweaks' do
 
       it 'should fail' do
         expect {
-          should
+          should contain_class('tweaks')
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
@@ -565,7 +565,7 @@ describe 'tweaks' do
 
       it 'should fail' do
         expect {
-          should
+          should contain_class('tweaks')
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
@@ -582,7 +582,7 @@ describe 'tweaks' do
 
       it 'should fail' do
         expect {
-          should
+          should contain_class('tweaks')
         }.to raise_error(Puppet::Error, /^str2bool\(\):/)
       end
     end
