@@ -7,4 +7,4 @@ fixtures:
       repo: 'git://github.com/ghoneycutt/puppet-module-common.git'
       ref: 'v1.0.0'
   symlinks:
-    ltscore: "#{source_dir}"
+    tweaks: "#{source_dir}"
