@@ -7,5 +7,5 @@ summary      'Linux Server tweaks'
 description  'Collection of Linux server tweaks'
 project_page 'https://github.com/kylefu8/puppet-module-tweaks'
 
-dependency 'puppetlabs/stdlib', '>= 4.2.0'
-dependency 'ghoneycutt/common', '>= 1.0.0'
+dependency 'puppetlabs/stdlib', '>= 4.6.0'
+dependency 'ghoneycutt/common', '>= 1.3.0'
