@@ -1,4 +1,8 @@
-# ltscore module #
+# tweaks module #
+===
+
+Collocation of Linux system tweaks. 
+Former name is ltscore.
 
 ===
 

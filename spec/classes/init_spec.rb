@@ -1,9 +1,9 @@
 require 'spec_helper'
-describe 'ltscore' do
+describe 'tweaks' do
 
   describe 'with default values for all parameters' do
     it { should compile.with_all_deps }
-    it { should contain_class('ltscore')}
+    it { should contain_class('tweaks')}
     it { should have_resource_count(0) }
   end
 

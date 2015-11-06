@@ -1,8 +1,8 @@
-# == Class: ltscore
+# == Class: tweaks
 #
-# Linux Terminal Server related tweaks.
+# Linux Server related tweaks.
 #
-class ltscore (
+class tweaks (
   $fix_access_to_alsa          = false,
   $fix_haldaemon               = false,
   $fix_localscratch            = false,
@@ -333,7 +333,7 @@ class ltscore (
           owner   => 'root',
           group   => 'root',
           mode    => '0644',
-          content => template('ltscore/xinetd_d_echo.erb'),
+          content => template('tweaks/xinetd_d_echo.erb'),
           notify  => 'Exec[fix_xinetd]',
         }
         exec { 'fix_xinetd':
