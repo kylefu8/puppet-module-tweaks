@@ -447,7 +447,7 @@ describe 'tweaks' do
       it 'should fail' do
         expect {
           should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+        }.to raise_error(Puppet::Error, /str2bool/)
       end
     end
 # </fix_access_to_alsa should fail on invalid types>
@@ -464,7 +464,7 @@ describe 'tweaks' do
       it 'should fail' do
         expect {
           should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+        }.to raise_error(Puppet::Error, /str2bool/)
       end
     end
 # </fix_haldaemon should fail on invalid types>
@@ -481,7 +481,7 @@ describe 'tweaks' do
       it 'should fail' do
         expect {
           should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+        }.to raise_error(Puppet::Error, /str2bool/)
       end
     end
 # </fix_localscratch should fail on invalid types>
@@ -498,7 +498,7 @@ describe 'tweaks' do
       it 'should fail' do
         expect {
           should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+        }.to raise_error(Puppet::Error, /str2bool/)
       end
     end
 # </fix_messages_permission should fail on invalid types>
@@ -515,7 +515,7 @@ describe 'tweaks' do
       it 'should fail' do
         expect {
           should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+        }.to raise_error(Puppet::Error, /str2bool/)
       end
     end
 # </fix_services should fail on invalid types>
@@ -532,7 +532,7 @@ describe 'tweaks' do
       it 'should fail' do
         expect {
           should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+        }.to raise_error(Puppet::Error, /str2bool/)
       end
     end
 # </fix_swappiness should fail on invalid types>
@@ -549,7 +549,7 @@ describe 'tweaks' do
       it 'should fail' do
         expect {
           should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+        }.to raise_error(Puppet::Error, /str2bool/)
       end
     end
 # </fix_systohc_for_vm should fail on invalid types>
@@ -566,7 +566,7 @@ describe 'tweaks' do
       it 'should fail' do
         expect {
           should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+        }.to raise_error(Puppet::Error, /str2bool/)
       end
     end
 # </fix_updatedb should fail on invalid types>
@@ -583,7 +583,7 @@ describe 'tweaks' do
       it 'should fail' do
         expect {
           should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /^str2bool\(\):/)
+        }.to raise_error(Puppet::Error, /str2bool/)
       end
     end
 # </fix_xinetd should fail on invalid types>
