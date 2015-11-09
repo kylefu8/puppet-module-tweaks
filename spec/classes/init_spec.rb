@@ -27,6 +27,7 @@ describe 'tweaks' do
     # not existing OS
     'WierdOS-12' =>  {
       :os => 'WierdOS', :rel => '12', :access_to_alsa => false, :haldaemon => false, :localscratch => false, :messages_permission => false, :services => false, :swappiness => false, :systohc_for_vm => false, :updatedb => false, :xinetd => false,
+      :servicelist => [],
       },
     }
 
@@ -207,30 +208,20 @@ describe 'tweaks' do
             }
           end
           if value.to_s == 'true' and v[:services] == true
-            if v[:servicelist].class == Array
-              v[:servicelist].each do |srv|
-                it {
-                  should contain_service(srv).with({
-                    'enable' => false,
-                  })
-                }
-              end
-            else
+            v[:servicelist].each do |srv|
               it {
-                should contain_service(v[:services]).with({
+                should contain_service(srv).with({
                   'enable' => false,
                 })
               }
             end
           elsif value.to_s == 'false'
-            if v[:servicelist].class == Array
-              v[:servicelist].each do |srv|
-                it {
-                  should_not contain_service(srv).with({
-                    'enable' => false,
-                  })
-                }
-              end
+            v[:servicelist].each do |srv|
+              it {
+                should_not contain_service(srv).with({
+                  'enable' => false,
+                })
+              }
             end
           else
             it 'should fail' do
@@ -318,7 +309,7 @@ describe 'tweaks' do
                 }
               end
               if value.to_s == 'true' and v[:systohc_for_vm] == true
-                if ( value_virtual.to_s == 'true' )
+                if value_virtual.to_s == 'true'
                   it do
                     should contain_exec('fix_systohc_for_vm').with({
                       'command' => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
