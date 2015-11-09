@@ -231,12 +231,6 @@ describe 'tweaks' do
                   })
                 }
               end
-            else
-              it {
-                should_not contain_service(v[:services]).with({
-                  'enable' => false,
-                })
-              }
             end
           else
             it 'should fail' do
@@ -324,7 +318,7 @@ describe 'tweaks' do
                 }
               end
               if value.to_s == 'true' and v[:systohc_for_vm] == true
-                if ( value_virtual == true or value_virtual == 'true' )
+                if ( value_virtual.to_s == 'true' )
                   it do
                     should contain_exec('fix_systohc_for_vm').with({
                       'command' => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
@@ -416,6 +410,12 @@ describe 'tweaks' do
               })
             end
           elsif value.to_s == 'false'
+            it do
+              should_not contain_package('xinetd')
+            end
+            it do
+              should_not contain_file('/etc/xinetd.d/echo')
+            end
             it do
               should_not contain_exec('fix_xinetd')
             end
