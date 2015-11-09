@@ -9,6 +9,7 @@ class tweaks (
   $fix_localscratch_path       = '/local/scratch',
   $fix_messages_permission     = false,
   $fix_services                = false,
+  $fix_services_services       = 'USE_DEFAULTS',
   $fix_swappiness              = false,
   $fix_swappiness_value        = '30',
   $fix_systohc_for_vm          = false,
@@ -131,7 +132,7 @@ class tweaks (
   if $fix_services_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
       'Suse-11': {
-        $disableservices = [
+        $fix_services_services_default = [
           'acpid',
           'avahi-daemon',
           'bluez-coldplug',
@@ -149,7 +150,7 @@ class tweaks (
         ]
       }
       'Suse-10': {
-        $disableservices = [
+        $fix_services_services_default = [
           'acpid',
           'avahi-daemon',
           'fbset',
@@ -167,7 +168,7 @@ class tweaks (
         ]
       }
       'RedHat-5': {
-        $disableservices = [
+        $fix_services_services_default = [
           'abrtd',
           'acpid',
           'avahi-daemon',
@@ -191,7 +192,7 @@ class tweaks (
         ]
       }
       'RedHat-6': {
-        $disableservices = [
+        $fix_services_services_default = [
           'abrtd',
           'acpid',
           'avahi-daemon',
@@ -215,13 +216,19 @@ class tweaks (
         ]
       }
       default: {
-        $disableservices = []
+        $fix_services_services_default = []
       }
     }
 
+    $fix_services_services_real = $fix_services_services ? {
+      'USE_DEFAULTS' => $fix_services_services_default,
+      default        => $fix_services_services
+    }
+    validate_array($fix_services_services_real)
+
     case "${::osfamily}-${::lsbmajdistrelease}" {
       'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
-        service { $disableservices :
+        service { $fix_services_services_real :
           enable => false,
         }
       }
