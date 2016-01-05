@@ -242,10 +242,11 @@ class tweaks (
   if $fix_swappiness_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
       'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
-        exec { 'swappiness':
-          command => "/bin/echo ${fix_swappiness_value} > /proc/sys/vm/swappiness",
-          path    => '/bin:/usr/bin',
-          unless  => "/bin/grep '^${fix_swappiness_value}$' /proc/sys/vm/swappiness",
+        file_line { 'swappiness':
+          ensure => present,
+          path   => '/proc/sys/vm/swappiness',
+          line   => $fix_swappiness_value,
+          match  => "^${fix_swappiness_value}$",
         }
       }
       default: {

@@ -243,15 +243,16 @@ describe 'tweaks' do
           end
           if value == true and v[:localscratch] == true
             it do
-              should contain_exec('swappiness').with({
-                'command' => "/bin/echo 30 > /proc/sys/vm/swappiness",
-                'path'    => '/bin:/usr/bin',
-                'unless'  => "/bin/grep '^30$' /proc/sys/vm/swappiness",
+              should contain_file_line('swappiness').with({
+                'ensure' => 'present',
+                'path'   => '/proc/sys/vm/swappiness',
+                'line'   => '30',
+                'match'  => '^30$',
               })
             end
           elsif value == false
             it do
-              should_not contain_exec('swappiness')
+              should_not contain_file_line('swappiness')
             end
           else
             it 'should fail' do
@@ -272,15 +273,16 @@ describe 'tweaks' do
           end
           if value == true and v[:localscratch] == true
             it do
-              should contain_exec('swappiness').with({
-                'command' => "/bin/echo 60 > /proc/sys/vm/swappiness",
-                'path'    => '/bin:/usr/bin',
-                'unless'  => "/bin/grep '^60$' /proc/sys/vm/swappiness",
+              should contain_file_line('swappiness').with({
+                'ensure' => 'present',
+                'path'   => '/proc/sys/vm/swappiness',
+                'line'   => '60',
+                'match'  => '^60$',
               })
             end
           elsif value == false
             it do
-              should_not contain_exec('swappiness')
+              should_not contain_file_line('swappiness')
             end
           else
             it 'should fail' do
