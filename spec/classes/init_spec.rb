@@ -441,6 +441,10 @@ describe 'tweaks' do
 
       ['invalid',true,nil,3,2.42,a={'ha'=>'sh'}].each do |service|
         context "with fix_services_services set to invalid #{service} (as #{service.class}) on supported OS" do
+          let(:facts) { {
+            :osfamily          => 'Suse',
+            :lsbmajdistrelease => '11',
+          } }
           let(:params) { {
             :fix_services          => true,
             :fix_services_services => service,
