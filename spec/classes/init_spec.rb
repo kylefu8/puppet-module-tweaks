@@ -39,14 +39,14 @@ describe 'tweaks' do
         }
       end
 
-# <fix_access_to_alsa functionality & stringified bools handling>
-      [true,'true',false,'false'].each do |value|
+      # <fix_access_to_alsa functionality>
+      [true,false].each do |value|
         context "with fix_access_to_alsa set to valid #{value} (as #{value.class})" do
           let :params do
             { :fix_access_to_alsa => value,
             }
           end
-          if value.to_s == 'true' and v[:access_to_alsa] == true
+          if value == true and v[:access_to_alsa] == true
             it do
               should contain_exec('fix_access_to_alsa').with({
                 'command' => 'sed -i \'s#NAME="snd/%k".*$#NAME="snd/%k",MODE="0666"#\' /etc/udev/rules.d/40-alsa.rules',
@@ -54,7 +54,7 @@ describe 'tweaks' do
                 'unless'  => 'test -f /etc/udev/rules.d/40-alsa.rules && grep "snd.*0666" /etc/udev/rules.d/40-alsa.rules',
               })
             end
-          elsif value.to_s == 'false'
+          elsif value == false
             it do
               should_not contain_exec('fix_access_to_alsa')
             end
@@ -67,16 +67,16 @@ describe 'tweaks' do
           end
         end
       end
-# </fix_access_to_alsa functionality & stringified bools handling>
+      # </fix_access_to_alsa functionality>
 
-# <fix_haldaemon functionality & stringified bools handling>
-      [true,'true',false,'false'].each do |value|
+      # <fix_haldaemon functionality>
+      [true,false].each do |value|
         context "with fix_haldaemon set to valid #{value} (as #{value.class})" do
           let :params do
             { :fix_haldaemon => value,
             }
           end
-          if value.to_s == 'true' and v[:haldaemon] == true
+          if value == true and v[:haldaemon] == true
             it do
               should contain_service('haldaemon').with({
                 'ensure' => 'running',
@@ -89,7 +89,7 @@ describe 'tweaks' do
                 'notify'  => 'Service[haldaemon]',
               })
             end
-          elsif value.to_s == 'false'
+          elsif value == false
             it do
               should_not contain_service('haldaemon')
             end
@@ -105,16 +105,16 @@ describe 'tweaks' do
           end
         end
       end
-# </fix_haldaemon functionality & stringified bools handling>
+      # </fix_haldaemon functionality>
 
-# <fix_localscratch functionality & stringified bools handling>
-      [true,'true',false,'false'].each do |value|
+      # <fix_localscratch functionality>
+      [true,false].each do |value|
         context "with fix_localscratch set to valid #{value} (as #{value.class})" do
           let :params do
             { :fix_localscratch => value,
             }
           end
-          if value.to_s == 'true' and v[:localscratch] == true
+          if value == true and v[:localscratch] == true
             it do
               should contain_file('fix_localscratch_path').with({
                 'ensure'  => 'directory',
@@ -125,7 +125,7 @@ describe 'tweaks' do
                 'require' => 'Common::Mkdir_p[/local/scratch]',
               })
             end
-          elsif value.to_s == 'false'
+          elsif value == false
             it do
               should_not contain_file('fix_localscratch_path')
             end
@@ -139,14 +139,14 @@ describe 'tweaks' do
         end
       end
 
-      [true,'true',false,'false'].each do |value|
+      [true,false].each do |value|
         context "with fix_localscratch set to valid #{value} (as #{value.class}), and fix_localscratch_path set to /local/test" do
           let :params do
             { :fix_localscratch => value,
               :fix_localscratch_path => '/local/test',
             }
           end
-          if value.to_s == 'true' and v[:localscratch] == true
+          if value == true and v[:localscratch] == true
             it do
               should contain_file('fix_localscratch_path').with({
                 'ensure'  => 'directory',
@@ -157,7 +157,7 @@ describe 'tweaks' do
                 'require' => 'Common::Mkdir_p[/local/test]',
               })
             end
-          elsif value.to_s == 'false'
+          elsif value == false
             it do
               should_not contain_file('fix_localscratch_path')
             end
@@ -170,22 +170,22 @@ describe 'tweaks' do
           end
         end
       end
-# </fix_localscratch functionality & stringified bools handling>
+      # </fix_localscratch functionality>
 
-# <fix_messages_permission functionality & stringified bools handling>
-      [true,'true',false,'false'].each do |value|
+      # <fix_messages_permission functionality>
+      [true,false].each do |value|
         context "with fix_messages_permission set to valid #{value} (as #{value.class})" do
           let :params do
             { :fix_messages_permission => value,
             }
           end
-          if value.to_s == 'true' and v[:messages_permission] == true
+          if value == true and v[:messages_permission] == true
             it do
               should contain_file('/var/log/messages').with({
                 'mode'    => '0644',
               })
             end
-          elsif value.to_s == 'false'
+          elsif value == false
             it do
               should_not contain_file('/var/log/messages')
             end
@@ -198,16 +198,16 @@ describe 'tweaks' do
           end
         end
       end
-# </fix_messages_permission functionality & stringified bools handling>
+      # </fix_messages_permission functionality>
 
-# <fix_services functionality & stringified bools handling>
-      [true,'true',false,'false'].each do |value|
+      # <fix_services functionality>
+      [true,false].each do |value|
         context "with fix_services set to valid #{value} (as #{value.class})" do
           let :params do
             { :fix_services => value,
             }
           end
-          if value.to_s == 'true' and v[:services] == true
+          if value == true and v[:services] == true
             v[:servicelist].each do |srv|
               it {
                 should contain_service(srv).with({
@@ -215,7 +215,7 @@ describe 'tweaks' do
                 })
               }
             end
-          elsif value.to_s == 'false'
+          elsif value == false
             v[:servicelist].each do |srv|
               it {
                 should_not contain_service(srv).with({
@@ -232,16 +232,16 @@ describe 'tweaks' do
           end
         end
       end
-# </fix_services functionality & stringified bools handling>
+      # </fix_services functionality>
 
-# <fix_swappiness functionality & stringified bools handling>
-      [true,'true',false,'false'].each do |value|
+      # <fix_swappiness functionality>
+      [true,false].each do |value|
         context "with fix_swappiness set to valid #{value} (as #{value.class})" do
           let :params do
             { :fix_swappiness => value,
             }
           end
-          if value.to_s == 'true' and v[:localscratch] == true
+          if value == true and v[:localscratch] == true
             it do
               should contain_exec('swappiness').with({
                 'command' => "/bin/echo 30 > /proc/sys/vm/swappiness",
@@ -249,7 +249,7 @@ describe 'tweaks' do
                 'unless'  => "/bin/grep '^30$' /proc/sys/vm/swappiness",
               })
             end
-          elsif value.to_s == 'false'
+          elsif value == false
             it do
               should_not contain_exec('swappiness')
             end
@@ -263,14 +263,14 @@ describe 'tweaks' do
         end
       end
 
-      [true,'true',false,'false'].each do |value|
+      [true,false].each do |value|
         context "with fix_swappiness set to valid #{value} (as #{value.class}), and fix_swappiness_value set to 60" do
           let :params do
             { :fix_swappiness => value,
               :fix_swappiness_value => 60,
             }
           end
-          if value.to_s == 'true' and v[:localscratch] == true
+          if value == true and v[:localscratch] == true
             it do
               should contain_exec('swappiness').with({
                 'command' => "/bin/echo 60 > /proc/sys/vm/swappiness",
@@ -278,7 +278,7 @@ describe 'tweaks' do
                 'unless'  => "/bin/grep '^60$' /proc/sys/vm/swappiness",
               })
             end
-          elsif value.to_s == 'false'
+          elsif value == false
             it do
               should_not contain_exec('swappiness')
             end
@@ -291,24 +291,24 @@ describe 'tweaks' do
           end
         end
       end
-# </fix_swappiness functionality & stringified bools handling>
+      # </fix_swappiness functionality>
 
-# <fix_systohc_for_vm functionality & stringified bools handling>
-      [true,'true',false,'false'].each do |value|
+      # <fix_systohc_for_vm functionality>
+      [true,false].each do |value|
         context "with fix_systohc_for_vm set to valid #{value} (as #{value.class})" do
           [true,'true',false,'false'].each do |value_virtual|
             context "with is_virtual set to valid #{value_virtual} (as #{value_virtual.class})" do
               let :facts do
                 { :osfamily          => v[:os],
                   :lsbmajdistrelease => v[:rel],
-                  :is_virtual => value_virtual,
+                  :is_virtual        => value_virtual,
                 }
               end
               let :params do
                 { :fix_systohc_for_vm => value,
                 }
               end
-              if value.to_s == 'true' and v[:systohc_for_vm] == true
+              if value == true and v[:systohc_for_vm] == true
                 if value_virtual.to_s == 'true'
                   it do
                     should contain_exec('fix_systohc_for_vm').with({
@@ -324,7 +324,7 @@ describe 'tweaks' do
                     }.to raise_error(Puppet::Error,/fix_systohc_for_vm is only supported on Suse 10\&11 Virtual Machine./)
                   end
                 end
-              elsif value.to_s == 'false'
+              elsif value == false
                 it do
                   should_not contain_exec('fix_systohc_for_vm')
                 end
@@ -339,16 +339,16 @@ describe 'tweaks' do
           end
         end
       end
-# </fix_systohc_for_vm functionality & stringified bools handling>
+      # </fix_systohc_for_vm functionality>
 
-# <fix_updatedb functionality & stringified bools handling>
-      [true,'true',false,'false'].each do |value|
+      # <fix_updatedb functionality>
+      [true,false].each do |value|
         context "with fix_updatedb set to valid #{value} (as #{value.class})" do
           let :params do
             { :fix_updatedb => value,
             }
           end
-          if value.to_s == 'true' and v[:updatedb] == true
+          if value == true and v[:updatedb] == true
             it do
               should contain_exec('fix_updatedb').with({
                 'command' => 'sed -i \'s/RUN_UPDATEDB=.*yes.*/RUN_UPDATEDB=no/\' /etc/sysconfig/locate',
@@ -356,7 +356,7 @@ describe 'tweaks' do
                 'onlyif'  => 'grep RUN_UPDATEDB=.*yes.* /etc/sysconfig/locate',
               })
             end
-          elsif value.to_s == 'false'
+          elsif value == false
             it do
               should_not contain_exec('fix_updatedb')
             end
@@ -369,17 +369,17 @@ describe 'tweaks' do
           end
         end
       end
-# </fix_updatedb functionality & stringified bools handling>
+      # </fix_updatedb functionality>
 
-# <fix_xinetd functionality & stringified bools handling>
-      [true,'true',false,'false'].each do |value|
+      # <fix_xinetd functionality>
+      [true,false].each do |value|
         context "with fix_xinetd set to valid #{value} (as #{value.class})" do
           echo_fixture = File.read(fixtures("xinetd_d_echo"))
           let :params do
             { :fix_xinetd => value,
             }
           end
-          if value.to_s == 'true' and v[:xinetd] == true
+          if value == true and v[:xinetd] == true
             it do
               should contain_package('xinetd').with({
                'ensure' => 'installed',
@@ -400,7 +400,7 @@ describe 'tweaks' do
                 'refreshonly' => true,
               })
             end
-          elsif value.to_s == 'false'
+          elsif value == false
             it do
               should_not contain_package('xinetd')
             end
@@ -419,200 +419,84 @@ describe 'tweaks' do
           end
         end
       end
-# </fix_xinetd functionality & stringified bools handling>
-
+      # </fix_xinetd functionality>
     end
   end
 
-# <fix_services_services functionality & invalid type handling>
-      describe 'with fix_services_services set to valid array on supported OS' do
-        let(:facts) { {
-          :osfamily          => 'Suse',
-          :lsbmajdistrelease => '11',
-        } }
-        let(:params) { {
-          :fix_services          => true,
-          :fix_services_services => ['stop','service'],
-        } }
-        ['stop','service'].each do |service|
-          it { should contain_service(service).with_enable('false') }
-        end
-      end
+  # <fix_services_services functionality>
+  describe 'with fix_services_services set to valid array on supported OS' do
+    let(:facts) { {
+      :osfamily          => 'Suse',
+      :lsbmajdistrelease => '11',
+    } }
+    let(:params) { {
+      :fix_services          => true,
+      :fix_services_services => ['stop','service'],
+    } }
+    ['stop','service'].each do |service|
+      it { should contain_service(service).with_enable('false') }
+    end
+  end
+  # </fix_services_services functionality>
 
-      ['invalid',true,nil,3,2.42,a={'ha'=>'sh'}].each do |service|
-        context "with fix_services_services set to invalid #{service} (as #{service.class}) on supported OS" do
-          let(:facts) { {
-            :osfamily          => 'Suse',
-            :lsbmajdistrelease => '11',
-          } }
-          let(:params) { {
-            :fix_services          => true,
-            :fix_services_services => service,
-          } }
+  describe 'variable type and content validations' do
+    # set needed custom facts and variables
+    let(:facts) do
+      {
+        :osfamily          => 'Suse',
+        :lsbmajdistrelease => '11',
+        # needed to test fix_systohc_for_vm
+        :is_virtual        => true,
+      }
+    end
+    let(:validation_params) do
+      {
+        # needed to test fix_services_services
+        :fix_services => true,
+      }
+    end
 
-          it 'should fail' do
-            expect {
-              should contain_class(subject)
-            }.to raise_error(Puppet::Error,/is not an Array/)
+    validations = {
+      'absolute_path' => {
+        :name    => %w(fix_localscratch_path),
+        :valid   => %w(/absolute/filepath /absolute/directory/),
+        :invalid => ['../invalid', 3, 2.42, %w(array), { 'ha' => 'sh' }, true, false, nil],
+        :message => 'is not an absolute path',
+      },
+      'array' => {
+        :name    => %w(fix_services_services),
+        :valid   => [%w(ar ray)],
+        :invalid => ['invalid', { 'ha' => 'sh' }, 3, 2.42, true, false, nil],
+        :message => 'is not an Array',
+      },
+      'bool_stringified' => {
+        :name    => %w(fix_access_to_alsa fix_haldaemon fix_localscratch fix_messages_permission fix_services fix_swappiness fix_systohc_for_vm fix_updatedb fix_xinetd),
+        :valid   => [true, false, 'true', 'false'],
+        :invalid => ['invalid', %w(array), { 'ha' => 'sh' }, 3, 2.42],
+        :message => '(Unknown type of boolean|str2bool\(\): Requires either string to work with)',
+      },
+    }
+
+    validations.sort.each do |type, var|
+      var[:name].each do |var_name|
+        var[:valid].each do |valid|
+          context "with #{var_name} (#{type}) set to valid #{valid} (as #{valid.class})" do
+            let(:params) { validation_params.merge({ :"#{var_name}" => valid, }) }
+            it { should compile }
           end
         end
-      end
-# </fix_services_services functionality & invalid type handling>
 
-# should fail on invalid types tests
-  ['invalid',3,2.42,['array'],a = { 'ha' => 'sh' }].each do |value|
-# <fix_access_to_alsa should fail on invalid types>
-    context "When fix_access_to_alsa set to invalid #{value} (as #{value.class}) on supported OS" do
-      let (:params) { { :fix_access_to_alsa => value } }
-      let :facts do
-        { :osfamily          => 'Suse',
-          :lsbmajdistrelease => '11',
-        }
-      end
-
-      it 'should fail' do
-        expect {
-          should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /str2bool/)
-      end
-    end
-# </fix_access_to_alsa should fail on invalid types>
-
-# <fix_haldaemon should fail on invalid types>
-    context "When fix_haldaemon set to invalid #{value} (as #{value.class}) on supported OS" do
-      let (:params) { { :fix_haldaemon => value } }
-      let :facts do
-        { :osfamily          => 'Suse',
-          :lsbmajdistrelease => '11',
-        }
-      end
-
-      it 'should fail' do
-        expect {
-          should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /str2bool/)
-      end
-    end
-# </fix_haldaemon should fail on invalid types>
-
-# <fix_localscratch should fail on invalid types>
-    context "When fix_localscratch set to invalid #{value} (as #{value.class}) on supported OS" do
-      let (:params) { { :fix_localscratch => value } }
-      let :facts do
-        { :osfamily          => 'Suse',
-          :lsbmajdistrelease => '11',
-        }
-      end
-
-      it 'should fail' do
-        expect {
-          should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /str2bool/)
-      end
-    end
-# </fix_localscratch should fail on invalid types>
-
-# <fix_messages_permission should fail on invalid types>
-    context "When fix_messages_permission set to invalid #{value} (as #{value.class}) on supported OS" do
-      let (:params) { { :fix_messages_permission => value } }
-      let :facts do
-        { :osfamily          => 'Suse',
-          :lsbmajdistrelease => '11',
-        }
-      end
-
-      it 'should fail' do
-        expect {
-          should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /str2bool/)
-      end
-    end
-# </fix_messages_permission should fail on invalid types>
-
-# <fix_services should fail on invalid types>
-    context "When fix_services set to invalid #{value} (as #{value.class}) on supported OS" do
-      let (:params) { { :fix_services => value } }
-      let :facts do
-        { :osfamily          => 'Suse',
-          :lsbmajdistrelease => '11',
-        }
-      end
-
-      it 'should fail' do
-        expect {
-          should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /str2bool/)
-      end
-    end
-# </fix_services should fail on invalid types>
-
-# <fix_swappiness should fail on invalid types>
-    context "When fix_swappiness set to invalid #{value} (as #{value.class}) on supported OS" do
-      let (:params) { { :fix_swappiness => value } }
-      let :facts do
-        { :osfamily          => 'Suse',
-          :lsbmajdistrelease => '11',
-        }
-      end
-
-      it 'should fail' do
-        expect {
-          should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /str2bool/)
-      end
-    end
-# </fix_swappiness should fail on invalid types>
-
-# <fix_systohc_for_vm should fail on invalid types>
-    context "When fix_systohc_for_vm set to invalid #{value} (as #{value.class}) on supported OS" do
-      let (:params) { { :fix_systohc_for_vm => value } }
-      let :facts do
-        { :osfamily          => 'Suse',
-          :lsbmajdistrelease => '11',
-        }
-      end
-
-      it 'should fail' do
-        expect {
-          should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /str2bool/)
-      end
-    end
-# </fix_systohc_for_vm should fail on invalid types>
-
-# <fix_updatedb should fail on invalid types>
-    context "When fix_updatedb set to invalid #{value} (as #{value.class}) on supported OS" do
-      let (:params) { { :fix_updatedb => value } }
-      let :facts do
-        { :osfamily          => 'Suse',
-          :lsbmajdistrelease => '11',
-        }
-      end
-
-      it 'should fail' do
-        expect {
-          should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /str2bool/)
-      end
-    end
-# </fix_updatedb should fail on invalid types>
-
-# <fix_xinetd should fail on invalid types>
-    context "When fix_xinetd set to invalid #{value} (as #{value.class}) on supported OS" do
-      let (:params) { { :fix_xinetd => value } }
-      let :facts do
-        { :osfamily          => 'Suse',
-          :lsbmajdistrelease => '11',
-        }
-      end
-
-      it 'should fail' do
-        expect {
-          should contain_class('tweaks')
-        }.to raise_error(Puppet::Error, /str2bool/)
-      end
-    end
-# </fix_xinetd should fail on invalid types>
-  end
-
+        var[:invalid].each do |invalid|
+          context "with #{var_name} (#{type}) set to invalid #{invalid} (as #{invalid.class})" do
+            let(:params) { validation_params.merge({ :"#{var_name}" => invalid, }) }
+            it 'should fail' do
+              expect do
+                should contain_class(subject)
+              end.to raise_error(Puppet::Error, /#{var[:message]}/)
+            end
+          end
+        end
+      end # var[:name].each
+    end # validations.sort.each
+  end # describe 'variable type and content validations'
 end
