@@ -275,10 +275,11 @@ class tweaks (
     if ( $is_virtual_real == true ) {
       case "${::osfamily}-${::lsbmajdistrelease}" {
         'Suse-10', 'Suse-11': {
-          exec { 'fix_systohc_for_vm' :
-            command => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
-            path    => '/bin:/usr/bin',
-            onlyif  => 'grep SYSTOHC=.*yes.* /etc/sysconfig/clock',
+          file_line { 'fix_systohc_for_vm':
+            ensure => present,
+            path   => '/etc/sysconfig/clock',
+            line   => 'SYSTOHC="no"',
+            match  => '^SYSTOHC\=',
           }
         }
         default: {

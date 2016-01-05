@@ -313,10 +313,11 @@ describe 'tweaks' do
               if value == true and v[:systohc_for_vm] == true
                 if value_virtual.to_s == 'true'
                   it do
-                    should contain_exec('fix_systohc_for_vm').with({
-                      'command' => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
-                      'path'    => '/bin:/usr/bin',
-                      'onlyif'  => 'grep SYSTOHC=.*yes.* /etc/sysconfig/clock',
+                    should contain_file_line('fix_systohc_for_vm').with({
+                      'ensure' => 'present',
+                      'path'   => '/etc/sysconfig/clock',
+                      'line'   => 'SYSTOHC="no"',
+                      'match'  => '^SYSTOHC\=',
                     })
                   end
                 else
@@ -328,7 +329,7 @@ describe 'tweaks' do
                 end
               elsif value == false
                 it do
-                  should_not contain_exec('fix_systohc_for_vm')
+                  should_not contain_file_line('fix_systohc_for_vm')
                 end
               else
                 it 'should fail' do
