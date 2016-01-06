@@ -216,7 +216,7 @@ class tweaks (
         ]
       }
       default: {
-        $fix_services_services_default = []
+        fail('fix_services is only supported on RedHat 5&6, Suse 10&11.')
       }
     }
 
@@ -226,15 +226,8 @@ class tweaks (
     }
     validate_array($fix_services_services_real)
 
-    case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
-        service { $fix_services_services_real :
-          enable => false,
-        }
-      }
-      default: {
-        fail('fix_services is only supported on RedHat 5&6, Suse 10&11.')
-      }
+    service { $fix_services_services_real :
+      enable => false,
     }
   }
 
