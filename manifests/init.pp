@@ -242,10 +242,11 @@ class tweaks (
   if $fix_swappiness_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
       'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
-        exec { 'swappiness':
-          command => "/bin/echo ${fix_swappiness_value} > /proc/sys/vm/swappiness",
-          path    => '/bin:/usr/bin',
-          unless  => "/bin/grep '^${fix_swappiness_value}$' /proc/sys/vm/swappiness",
+        file_line { 'swappiness':
+          ensure => present,
+          path   => '/proc/sys/vm/swappiness',
+          line   => $fix_swappiness_value,
+          match  => "^${fix_swappiness_value}$",
         }
       }
       default: {
@@ -274,10 +275,11 @@ class tweaks (
     if ( $is_virtual_real == true ) {
       case "${::osfamily}-${::lsbmajdistrelease}" {
         'Suse-10', 'Suse-11': {
-          exec { 'fix_systohc_for_vm' :
-            command => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
-            path    => '/bin:/usr/bin',
-            onlyif  => 'grep SYSTOHC=.*yes.* /etc/sysconfig/clock',
+          file_line { 'fix_systohc_for_vm':
+            ensure => present,
+            path   => '/etc/sysconfig/clock',
+            line   => 'SYSTOHC="no"',
+            match  => '^SYSTOHC\=',
           }
         }
         default: {
@@ -300,15 +302,16 @@ class tweaks (
 # Disable updatedb in /etc/sysconfig/locate
   if ( $fix_updatedb_real == true ) {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11': {
-        exec { 'fix_updatedb':
-          command => 'sed -i \'s/RUN_UPDATEDB=.*yes.*/RUN_UPDATEDB=no/\' /etc/sysconfig/locate',
-          path    => '/bin:/usr/bin',
-          onlyif  => 'grep RUN_UPDATEDB=.*yes.* /etc/sysconfig/locate',
+      'Suse-10': {
+        file_line { 'fix_updatedb':
+          ensure => present,
+          path   => '/etc/sysconfig/locate',
+          line   => 'RUN_UPDATEDB=no',
+          match  => '^RUN_UPDATEDB\=',
         }
       }
       default: {
-        fail('fix_updatedb is only supported on Suse 10&11.')
+        fail('fix_updatedb is only supported on Suse 10.')
       }
     }
   }

@@ -21,7 +21,7 @@ describe 'tweaks' do
       :servicelist => [ 'acpid', 'avahi-daemon', 'fbset', 'hotkey-setup', 'microcode', 'namcd', 'owcimomd', 'powersaved', 'smartd', 'smbfs', 'splash', 'splash_early', 'suse-blinux', 'xdm', ],
     },
     'Suse-11' =>  {
-      :os => 'Suse',    :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => true,  :xinetd => true,
+      :os => 'Suse',    :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => false, :xinetd => true,
       :servicelist => [ 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'smartd', 'smbfs', 'splash', 'splash_early', 'xdm', ],
     },
     # not existing OS
@@ -243,15 +243,16 @@ describe 'tweaks' do
           end
           if value == true and v[:localscratch] == true
             it do
-              should contain_exec('swappiness').with({
-                'command' => "/bin/echo 30 > /proc/sys/vm/swappiness",
-                'path'    => '/bin:/usr/bin',
-                'unless'  => "/bin/grep '^30$' /proc/sys/vm/swappiness",
+              should contain_file_line('swappiness').with({
+                'ensure' => 'present',
+                'path'   => '/proc/sys/vm/swappiness',
+                'line'   => '30',
+                'match'  => '^30$',
               })
             end
           elsif value == false
             it do
-              should_not contain_exec('swappiness')
+              should_not contain_file_line('swappiness')
             end
           else
             it 'should fail' do
@@ -272,15 +273,16 @@ describe 'tweaks' do
           end
           if value == true and v[:localscratch] == true
             it do
-              should contain_exec('swappiness').with({
-                'command' => "/bin/echo 60 > /proc/sys/vm/swappiness",
-                'path'    => '/bin:/usr/bin',
-                'unless'  => "/bin/grep '^60$' /proc/sys/vm/swappiness",
+              should contain_file_line('swappiness').with({
+                'ensure' => 'present',
+                'path'   => '/proc/sys/vm/swappiness',
+                'line'   => '60',
+                'match'  => '^60$',
               })
             end
           elsif value == false
             it do
-              should_not contain_exec('swappiness')
+              should_not contain_file_line('swappiness')
             end
           else
             it 'should fail' do
@@ -311,10 +313,11 @@ describe 'tweaks' do
               if value == true and v[:systohc_for_vm] == true
                 if value_virtual.to_s == 'true'
                   it do
-                    should contain_exec('fix_systohc_for_vm').with({
-                      'command' => 'sed -i \'s/SYSTOHC=.*yes.*/SYSTOHC="no"/\' /etc/sysconfig/clock',
-                      'path'    => '/bin:/usr/bin',
-                      'onlyif'  => 'grep SYSTOHC=.*yes.* /etc/sysconfig/clock',
+                    should contain_file_line('fix_systohc_for_vm').with({
+                      'ensure' => 'present',
+                      'path'   => '/etc/sysconfig/clock',
+                      'line'   => 'SYSTOHC="no"',
+                      'match'  => '^SYSTOHC\=',
                     })
                   end
                 else
@@ -326,7 +329,7 @@ describe 'tweaks' do
                 end
               elsif value == false
                 it do
-                  should_not contain_exec('fix_systohc_for_vm')
+                  should_not contain_file_line('fix_systohc_for_vm')
                 end
               else
                 it 'should fail' do
@@ -350,21 +353,22 @@ describe 'tweaks' do
           end
           if value == true and v[:updatedb] == true
             it do
-              should contain_exec('fix_updatedb').with({
-                'command' => 'sed -i \'s/RUN_UPDATEDB=.*yes.*/RUN_UPDATEDB=no/\' /etc/sysconfig/locate',
-                'path'    => '/bin:/usr/bin',
-                'onlyif'  => 'grep RUN_UPDATEDB=.*yes.* /etc/sysconfig/locate',
+              should contain_file_line('fix_updatedb').with({
+                'ensure' => 'present',
+                'path'   => '/etc/sysconfig/locate',
+                'line'   => 'RUN_UPDATEDB=no',
+                'match'  => '^RUN_UPDATEDB\=',
               })
             end
           elsif value == false
             it do
-              should_not contain_exec('fix_updatedb')
+              should_not contain_file_line('fix_updatedb')
             end
           else
             it 'should fail' do
               expect {
                 should contain_class('tweaks')
-              }.to raise_error(Puppet::Error,/fix_updatedb is only supported on Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_updatedb is only supported on Suse 10/)
             end
           end
         end
@@ -470,7 +474,7 @@ describe 'tweaks' do
         :message => 'is not an Array',
       },
       'bool_stringified' => {
-        :name    => %w(fix_access_to_alsa fix_haldaemon fix_localscratch fix_messages_permission fix_services fix_swappiness fix_systohc_for_vm fix_updatedb fix_xinetd),
+        :name    => %w(fix_access_to_alsa fix_haldaemon fix_localscratch fix_messages_permission fix_services fix_swappiness fix_systohc_for_vm fix_xinetd),
         :valid   => [true, false, 'true', 'false'],
         :invalid => ['invalid', %w(array), { 'ha' => 'sh' }, 3, 2.42],
         :message => '(Unknown type of boolean|str2bool\(\): Requires either string to work with)',
@@ -478,6 +482,52 @@ describe 'tweaks' do
     }
 
     validations.sort.each do |type, var|
+      var[:name].each do |var_name|
+        var[:valid].each do |valid|
+          context "with #{var_name} (#{type}) set to valid #{valid} (as #{valid.class})" do
+            let(:params) { validation_params.merge({ :"#{var_name}" => valid, }) }
+            it { should compile }
+          end
+        end
+
+        var[:invalid].each do |invalid|
+          context "with #{var_name} (#{type}) set to invalid #{invalid} (as #{invalid.class})" do
+            let(:params) { validation_params.merge({ :"#{var_name}" => invalid, }) }
+            it 'should fail' do
+              expect do
+                should contain_class(subject)
+              end.to raise_error(Puppet::Error, /#{var[:message]}/)
+            end
+          end
+        end
+      end # var[:name].each
+    end # validations.sort.each
+  end # describe 'variable type and content validations'
+
+  describe 'variable type and content validations for Suse-10 specific functionality' do
+    # fix_updatedb is only valid on Suse-10, so we need a Suse-10 specific section :(
+    let(:facts) do
+      {
+        :osfamily          => 'Suse',
+        :lsbmajdistrelease => '10',
+      }
+    end
+    let(:validation_params) do
+      {
+        # not needed
+      }
+    end
+
+    validations_suse10 = {
+      'bool_stringified' => {
+        :name    => %w(fix_updatedb),
+        :valid   => [true, false, 'true', 'false'],
+        :invalid => ['invalid', %w(array), { 'ha' => 'sh' }, 3, 2.42],
+        :message => '(Unknown type of boolean|str2bool\(\): Requires either string to work with)',
+      },
+    }
+
+    validations_suse10.sort.each do |type, var|
       var[:name].each do |var_name|
         var[:valid].each do |valid|
           context "with #{var_name} (#{type}) set to valid #{valid} (as #{valid.class})" do
