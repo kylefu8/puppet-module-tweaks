@@ -428,17 +428,35 @@ describe 'tweaks' do
   end
 
   # <fix_services_services functionality>
-  describe 'with fix_services_services set to valid array on supported OS' do
-    let(:facts) { {
-      :osfamily          => 'Suse',
-      :lsbmajdistrelease => '11',
-    } }
-    let(:params) { {
-      :fix_services          => true,
-      :fix_services_services => ['stop','service'],
-    } }
-    ['stop','service'].each do |service|
-      it { should contain_service(service).with_enable('false') }
+  describe 'with fix_services_services set to valid array [\'servce1\', \'service2\']' do
+    let(:facts) do
+      {
+        :osfamily          => 'Suse',
+        :lsbmajdistrelease => '11',
+      }
+    end
+    let(:params) do
+      {
+        :fix_services          => true,
+        :fix_services_services => ['service1','service2'],
+      }
+    end
+
+    context 'on supported OS' do
+      ['service1','service2'].each do |service|
+        it { should contain_service(service).with_enable('false') }
+      end
+    end
+
+    context 'when \'service1\' resource already exists' do
+      let(:pre_condition) do
+        "service { 'service1': enable => false }"
+      end
+
+      it 'should not fail' do
+        should compile.with_all_deps
+      end
+      it { should contain_service('service2').with_enable('false') }
     end
   end
   # </fix_services_services functionality>

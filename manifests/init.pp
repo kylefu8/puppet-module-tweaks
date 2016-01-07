@@ -226,9 +226,7 @@ class tweaks (
     }
     validate_array($fix_services_services_real)
 
-    service { $fix_services_services_real :
-      enable => false,
-    }
+    ensure_resource('service', $fix_services_services_real, {'enable' => false})
   }
 
 # convert stringified booleans for fix_swappiness
