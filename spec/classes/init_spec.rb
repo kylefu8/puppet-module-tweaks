@@ -24,6 +24,10 @@ describe 'tweaks' do
       :os => 'Suse',    :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => false, :xinetd => true,
       :servicelist => [ 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'smartd', 'smbfs', 'splash', 'splash_early', 'xdm', ],
     },
+    'Suse-12' =>  {
+      :os => 'Suse',    :rel => '12', :access_to_alsa => false, :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => false, :swappiness => true,  :systohc_for_vm => false, :updatedb => true,  :xinetd => false,
+      :servicelist => [],
+    },
     # not existing OS
     'WierdOS-12' =>  {
       :os => 'WierdOS', :rel => '12', :access_to_alsa => false, :haldaemon => false, :localscratch => false, :messages_permission => false, :services => false, :swappiness => false, :systohc_for_vm => false, :updatedb => false, :xinetd => false,

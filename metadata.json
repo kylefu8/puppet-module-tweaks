@@ -41,14 +41,16 @@
       "operatingsystem": "SLES",
       "operatingsystemrelease": [
         "10",
-        "11"
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "SLED",
       "operatingsystemrelease": [
         "10",
-        "11"
+        "11",
+        "12"
       ]
     }
   ],
