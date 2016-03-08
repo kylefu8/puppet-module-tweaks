@@ -1,11 +1,11 @@
 # Function support matrix ##
-FunctionMatrix           EL-5  EL-6  Suse-10  Suse-11  Others
-fix_access_to_alsa       -     -     *        *        -
-fix_haldaemon            -     -     -        *        -
-fix_localscratch         *     *     *        *        -
-fix_messages_permission  *     *     *        *        -
-fix_services             *     *     *        *        -
-fix_swappiness           *     *     *        *        -
-fix_systohc_for_vm       -     -     *        *        -
-fix_updatedb             -     -     *        *        -
-fix_xinetd               *     *     *        *        -
+FunctionMatrix           EL-5  EL-6  EL-7  Suse-10  Suse-11  Suse-12 Others
+fix_access_to_alsa       -     -     -     *        *        -       -
+fix_haldaemon            -     -     -     -        *        -       -
+fix_localscratch         *     *     *     *        *        *       -
+fix_messages_permission  *     *     *     *        *        *       -
+fix_services             *     *     -     *        *        -       -
+fix_swappiness           *     *     *     *        *        *       -
+fix_systohc_for_vm       -     -     -     *        *        -       -
+fix_updatedb             -     -     -     *        *        *       -
+fix_xinetd               *     *     -     *        *        -       -

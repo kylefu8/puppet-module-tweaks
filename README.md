@@ -16,8 +16,10 @@ This module is supported on the following systems with Puppet v3 and Ruby 1.8.7,
 
 * EL 5
 * EL 6
+* EL 7
 * Suse 10
 * Suse 11
+* Suse 12
 
 ===
 

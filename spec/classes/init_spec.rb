@@ -16,6 +16,10 @@ describe 'tweaks' do
       :os => 'RedHat',  :rel => '6', :access_to_alsa => false,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => false, :updatedb => false, :xinetd => true,
       :servicelist => [ 'abrtd', 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'hotkey-setup', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'novell-iprint-listener', 'owcimomd', 'powersaved', 'smartd', 'smbfs', 'splash', 'splash_early', 'suse-blinux', 'xdm', ],
     },
+    'RedHat-7' => {
+      :os => 'RedHat',  :rel => '7', :access_to_alsa => false,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => false, :swappiness => true,  :systohc_for_vm => false, :updatedb => false, :xinetd => false,
+      :servicelist => [],
+    },
     'Suse-10' =>  {
       :os => 'Suse',    :rel => '10', :access_to_alsa => true,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => true,  :xinetd => true,
       :servicelist => [ 'acpid', 'avahi-daemon', 'fbset', 'hotkey-setup', 'microcode', 'namcd', 'owcimomd', 'powersaved', 'smartd', 'smbfs', 'splash', 'splash_early', 'suse-blinux', 'xdm', ],
@@ -23,6 +27,10 @@ describe 'tweaks' do
     'Suse-11' =>  {
       :os => 'Suse',    :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => false, :xinetd => true,
       :servicelist => [ 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'smartd', 'smbfs', 'splash', 'splash_early', 'xdm', ],
+    },
+    'Suse-12' =>  {
+      :os => 'Suse',    :rel => '12', :access_to_alsa => false, :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => false, :swappiness => true,  :systohc_for_vm => false, :updatedb => true,  :xinetd => false,
+      :servicelist => [],
     },
     # not existing OS
     'WierdOS-12' =>  {

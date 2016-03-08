@@ -82,7 +82,7 @@ class tweaks (
 # create localscratch path and permissions
   if ( $fix_localscratch_real == true ) {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
+      'Suse-10', 'Suse-11', 'Suse-12', 'RedHat-5', 'RedHat-6', 'RedHat-7': {
         common::mkdir_p { $fix_localscratch_path: }
 
         file { 'fix_localscratch_path':
@@ -110,7 +110,7 @@ class tweaks (
 # Set /var/log/messages to 0644
   if $fix_messages_permission_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
+      'Suse-10', 'Suse-11', 'Suse-12', 'RedHat-5', 'RedHat-6', 'RedHat-7': {
         file { '/var/log/messages' :
           mode => '0644',
         }
@@ -239,7 +239,7 @@ class tweaks (
 # Default value for fix_swappiness is 30
   if $fix_swappiness_real == true {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-11', 'RedHat-5', 'RedHat-6': {
+      'Suse-10', 'Suse-11', 'Suse-12', 'RedHat-5', 'RedHat-6', 'RedHat-7': {
         file_line { 'swappiness':
           ensure => present,
           path   => '/proc/sys/vm/swappiness',
@@ -300,7 +300,7 @@ class tweaks (
 # Disable updatedb in /etc/sysconfig/locate
   if ( $fix_updatedb_real == true ) {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10': {
+      'Suse-10', 'Suse-12': {
         file_line { 'fix_updatedb':
           ensure => present,
           path   => '/etc/sysconfig/locate',
