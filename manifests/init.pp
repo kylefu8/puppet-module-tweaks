@@ -300,7 +300,7 @@ class tweaks (
 # Disable updatedb in /etc/sysconfig/locate
   if ( $fix_updatedb_real == true ) {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-12': {
+      'Suse-10', 'Suse-11', 'Suse-12': {
         file_line { 'fix_updatedb':
           ensure => present,
           path   => '/etc/sysconfig/locate',
@@ -309,7 +309,7 @@ class tweaks (
         }
       }
       default: {
-        fail('fix_updatedb is only supported on Suse 10.')
+        fail('fix_updatedb is only supported on Suse.')
       }
     }
   }
