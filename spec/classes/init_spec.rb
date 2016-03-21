@@ -25,7 +25,7 @@ describe 'tweaks' do
       :servicelist => [ 'acpid', 'avahi-daemon', 'fbset', 'hotkey-setup', 'microcode', 'namcd', 'owcimomd', 'powersaved', 'smartd', 'smbfs', 'splash', 'splash_early', 'suse-blinux', 'xdm', ],
     },
     'Suse-11' =>  {
-      :os => 'Suse',    :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => false, :xinetd => true,
+      :os => 'Suse',    :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => true,  :xinetd => true,
       :servicelist => [ 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'smartd', 'smbfs', 'splash', 'splash_early', 'xdm', ],
     },
     'Suse-12' =>  {
@@ -141,7 +141,7 @@ describe 'tweaks' do
             it 'should fail' do
               expect {
                 should contain_class('tweaks')
-              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5\&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5, 6 \& 7, Suse 10, 11 \& 12/)
             end
           end
         end
@@ -173,7 +173,7 @@ describe 'tweaks' do
             it 'should fail' do
               expect {
                 should contain_class('tweaks')
-              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5\&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_localscratch is only supported on RedHat 5, 6 \& 7, Suse 10, 11 \& 12/)
             end
           end
         end
@@ -201,7 +201,7 @@ describe 'tweaks' do
             it 'should fail' do
               expect {
                 should contain_class('tweaks')
-              }.to raise_error(Puppet::Error,/fix_messages_permission is only supported on RedHat 5\&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_messages_permission is only supported on RedHat 5, 6 \& 7, Suse 10, 11 \& 12/)
             end
           end
         end
@@ -266,7 +266,7 @@ describe 'tweaks' do
             it 'should fail' do
               expect {
                 should contain_class('tweaks')
-              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5\&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5, 6 \& 7, Suse 10, 11 \& 12/)
             end
           end
         end
@@ -296,7 +296,7 @@ describe 'tweaks' do
             it 'should fail' do
               expect {
                 should contain_class('tweaks')
-              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5\&6, Suse 10\&11./)
+              }.to raise_error(Puppet::Error,/fix_swappiness is only supported on RedHat 5, 6 \& 7, Suse 10, 11 \& 12/)
             end
           end
         end
@@ -376,7 +376,7 @@ describe 'tweaks' do
             it 'should fail' do
               expect {
                 should contain_class('tweaks')
-              }.to raise_error(Puppet::Error,/fix_updatedb is only supported on Suse 10/)
+              }.to raise_error(Puppet::Error,/fix_updatedb is only supported on Suse 10, 11 \& 12/)
             end
           end
         end

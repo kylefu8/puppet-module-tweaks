@@ -95,7 +95,7 @@ class tweaks (
         }
       }
       default: {
-        fail('fix_localscratch is only supported on RedHat 5&6, Suse 10&11.')
+        fail('fix_localscratch is only supported on RedHat 5, 6 & 7, Suse 10, 11 & 12.')
       }
     }
   }
@@ -116,7 +116,7 @@ class tweaks (
         }
       }
       default: {
-        fail('fix_messages_permission is only supported on RedHat 5&6, Suse 10&11.')
+        fail('fix_messages_permission is only supported on RedHat 5, 6 & 7, Suse 10, 11 & 12.')
       }
     }
   }
@@ -248,7 +248,7 @@ class tweaks (
         }
       }
       default: {
-        fail('fix_swappiness is only supported on RedHat 5&6, Suse 10&11.')
+        fail('fix_swappiness is only supported on RedHat 5, 6 & 7, Suse 10, 11 & 12.')
       }
     }
   }
@@ -300,7 +300,7 @@ class tweaks (
 # Disable updatedb in /etc/sysconfig/locate
   if ( $fix_updatedb_real == true ) {
     case "${::osfamily}-${::lsbmajdistrelease}" {
-      'Suse-10', 'Suse-12': {
+      'Suse-10', 'Suse-11', 'Suse-12': {
         file_line { 'fix_updatedb':
           ensure => present,
           path   => '/etc/sysconfig/locate',
@@ -309,7 +309,7 @@ class tweaks (
         }
       }
       default: {
-        fail('fix_updatedb is only supported on Suse 10.')
+        fail('fix_updatedb is only supported on Suse 10, 11 & 12.')
       }
     }
   }
