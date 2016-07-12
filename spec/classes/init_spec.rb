@@ -2,6 +2,8 @@ require 'spec_helper'
 describe 'tweaks' do
 
   describe 'with default values for all parameters' do
+    let(:facts) { { :is_virtual => true } }
+
     it { should compile.with_all_deps }
     it { should contain_class('tweaks')}
     it { should have_resource_count(0) }
@@ -44,6 +46,7 @@ describe 'tweaks' do
       let :facts do
         { :osfamily          => v[:os],
           :lsbmajdistrelease => v[:rel],
+          :is_virtual        => true,
         }
       end
 
@@ -464,6 +467,7 @@ describe 'tweaks' do
       {
         :osfamily          => 'Suse',
         :lsbmajdistrelease => '11',
+        :is_virtual        => true,
       }
     end
     let(:params) do
@@ -559,6 +563,7 @@ describe 'tweaks' do
       {
         :osfamily          => 'Suse',
         :lsbmajdistrelease => '10',
+        :is_virtual        => true,
       }
     end
     let(:validation_params) do
