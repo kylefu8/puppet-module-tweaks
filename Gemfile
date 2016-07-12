@@ -18,3 +18,8 @@ if RUBY_VERSION >= '1.8.7' and RUBY_VERSION < '1.9'
   # rake >= 11 does not support ruby 1.8.7
   gem 'rake', '~> 10.0'
 end
+
+if RUBY_VERSION < '2.0'
+  # json 2.x requires ruby 2.0. Lock to 1.8
+  gem 'json', '~> 1.8'
+end
