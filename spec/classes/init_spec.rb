@@ -9,32 +9,32 @@ describe 'tweaks' do
 
   fixes = {
     'RedHat-5' => {
-      :os => 'RedHat',  :rel => '5', :access_to_alsa => false,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => false, :updatedb => false, :xinetd => true,
+      :os => 'RedHat',  :rel => '5', :access_to_alsa => false,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :pulse_respawn => false, :services => true,  :swappiness => true,  :systohc_for_vm => false, :updatedb => false, :xinetd => true,
       :servicelist => [ 'abrtd', 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'hotkey-setup', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'novell-iprint-listener', 'owcimomd', 'powersaved', 'smartd', 'smbfs', 'splash', 'splash_early', 'suse-blinux', 'xdm', ],
     },
     'RedHat-6' => {
-      :os => 'RedHat',  :rel => '6', :access_to_alsa => false,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => false, :updatedb => false, :xinetd => true,
+      :os => 'RedHat',  :rel => '6', :access_to_alsa => false,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :pulse_respawn => true,  :services => true,  :swappiness => true,  :systohc_for_vm => false, :updatedb => false, :xinetd => true,
       :servicelist => [ 'abrtd', 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'hotkey-setup', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'novell-iprint-listener', 'owcimomd', 'powersaved', 'smartd', 'smbfs', 'splash', 'splash_early', 'suse-blinux', 'xdm', ],
     },
     'RedHat-7' => {
-      :os => 'RedHat',  :rel => '7', :access_to_alsa => false,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => false, :swappiness => true,  :systohc_for_vm => false, :updatedb => false, :xinetd => false,
+      :os => 'RedHat',  :rel => '7', :access_to_alsa => false,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :pulse_respawn => false, :services => false, :swappiness => true,  :systohc_for_vm => false, :updatedb => false, :xinetd => false,
       :servicelist => [],
     },
     'Suse-10' =>  {
-      :os => 'Suse',    :rel => '10', :access_to_alsa => true,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => true,  :xinetd => true,
+      :os => 'Suse',    :rel => '10', :access_to_alsa => true,  :haldaemon => false, :localscratch => true,  :messages_permission => true,  :pulse_respawn => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => true,  :xinetd => true,
       :servicelist => [ 'acpid', 'avahi-daemon', 'fbset', 'hotkey-setup', 'microcode', 'namcd', 'owcimomd', 'powersaved', 'smartd', 'smbfs', 'splash', 'splash_early', 'suse-blinux', 'xdm', ],
     },
     'Suse-11' =>  {
-      :os => 'Suse',    :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :localscratch => true,  :messages_permission => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => true,  :xinetd => true,
+      :os => 'Suse',    :rel => '11', :access_to_alsa => true,  :haldaemon => true,  :localscratch => true,  :messages_permission => true,  :pulse_respawn => true,  :services => true,  :swappiness => true,  :systohc_for_vm => true,  :updatedb => true,  :xinetd => true,
       :servicelist => [ 'acpid', 'avahi-daemon', 'bluez-coldplug', 'boot.open-iscsi', 'fbset', 'libvirtd', 'microcode.ctl', 'namcd', 'network-remotefs', 'smartd', 'smbfs', 'splash', 'splash_early', 'xdm', ],
     },
     'Suse-12' =>  {
-      :os => 'Suse',    :rel => '12', :access_to_alsa => false, :haldaemon => false, :localscratch => true,  :messages_permission => true,  :services => false, :swappiness => true,  :systohc_for_vm => false, :updatedb => true,  :xinetd => false,
+      :os => 'Suse',    :rel => '12', :access_to_alsa => false, :haldaemon => false, :localscratch => true,  :messages_permission => true,  :pulse_respawn => false, :services => false, :swappiness => true,  :systohc_for_vm => false, :updatedb => true,  :xinetd => false,
       :servicelist => [],
     },
     # not existing OS
     'WierdOS-12' =>  {
-      :os => 'WierdOS', :rel => '12', :access_to_alsa => false, :haldaemon => false, :localscratch => false, :messages_permission => false, :services => false, :swappiness => false, :systohc_for_vm => false, :updatedb => false, :xinetd => false,
+      :os => 'WierdOS', :rel => '12', :access_to_alsa => false, :haldaemon => false, :localscratch => false, :messages_permission => false, :pulse_respawn => false, :services => false, :swappiness => false, :systohc_for_vm => false, :updatedb => false, :xinetd => false,
       :servicelist => [],
       },
     }
@@ -208,39 +208,62 @@ describe 'tweaks' do
       end
       # </fix_messages_permission functionality>
 
-      # <fix_services functionality>
+      # <fix_messages_permission functionality>
       [true,false].each do |value|
-        context "with fix_services set to valid #{value} (as #{value.class})" do
+        context "with fix_messages_permission set to valid #{value} (as #{value.class})" do
           let :params do
-            { :fix_services => value,
+            { :fix_messages_permission => value,
             }
           end
-          if value == true and v[:services] == true
-            v[:servicelist].each do |srv|
-              it {
-                should contain_service(srv).with({
-                  'enable' => false,
-                })
-              }
+          if value == true and v[:messages_permission] == true
+            it do
+              should contain_file('/var/log/messages').with({
+                'mode'    => '0644',
+              })
             end
           elsif value == false
-            v[:servicelist].each do |srv|
-              it {
-                should_not contain_service(srv).with({
-                  'enable' => false,
-                })
-              }
+            it do
+              should_not contain_file('/var/log/messages')
             end
           else
             it 'should fail' do
               expect {
                 should contain_class('tweaks')
-              }.to raise_error(Puppet::Error, /fix_services is only supported on RedHat 5\&6, Suse 10\&11./ )
+              }.to raise_error(Puppet::Error,/fix_messages_permission is only supported on RedHat 5, 6 \& 7, Suse 10, 11 \& 12/)
             end
           end
         end
       end
-      # </fix_services functionality>
+      # </fix_messages_permission functionality>
+
+      # <fix_pulse_respawn functionality>
+      [true,false].each do |value|
+        context "with fix_pulse_respawn set to valid #{value} (as #{value.class})" do
+          let :params do
+            { :fix_pulse_respawn => value,
+            }
+          end
+          if value == true and v[:pulse_respawn] == true
+            it do
+              should contain_file_line('disable_pulse_respawn').with({
+                'ensure' => 'present',
+                'path'   => '/etc/pulse/client.conf',
+                'line'   => 'autospawn = no',
+                'match'  => '^autospawn =',
+              })
+            end
+          elsif value == false
+            it { should_not contain_file_line('disable_pulse_respawn') }
+          else
+            it 'should fail' do
+              expect {
+                should contain_class('tweaks')
+              }.to raise_error(Puppet::Error, /fix_pulse_respawn is only supported on RedHat 6, Suse 10 \& 11/ )
+            end
+          end
+        end
+      end
+      # </fix_pulse_respawn functionality>
 
       # <fix_swappiness functionality>
       [true,false].each do |value|
@@ -500,7 +523,7 @@ describe 'tweaks' do
         :message => 'is not an Array',
       },
       'bool_stringified' => {
-        :name    => %w(fix_access_to_alsa fix_haldaemon fix_localscratch fix_messages_permission fix_services fix_swappiness fix_systohc_for_vm fix_xinetd),
+        :name    => %w(fix_access_to_alsa fix_haldaemon fix_localscratch fix_messages_permission fix_pulse_respawn fix_services fix_swappiness fix_systohc_for_vm fix_xinetd),
         :valid   => [true, false, 'true', 'false'],
         :invalid => ['invalid', %w(array), { 'ha' => 'sh' }, 3, 2.42],
         :message => '(Unknown type of boolean|str2bool\(\): Requires either string to work with)',
