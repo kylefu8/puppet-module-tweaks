@@ -8,6 +8,7 @@ class tweaks (
   $fix_localscratch            = false,
   $fix_localscratch_path       = '/local/scratch',
   $fix_messages_permission     = false,
+  $fix_pulse_respawn           = false,
   $fix_services                = false,
   $fix_services_services       = 'USE_DEFAULTS',
   $fix_swappiness              = false,
@@ -117,6 +118,30 @@ class tweaks (
       }
       default: {
         fail('fix_messages_permission is only supported on RedHat 5, 6 & 7, Suse 10, 11 & 12.')
+      }
+    }
+  }
+
+# convert stringified booleans for fix_pulse_respawn
+  if is_bool($fix_pulse_respawn) {
+    $fix_pulse_respawn_real = $fix_pulse_respawn
+  } else {
+    $fix_pulse_respawn_real = str2bool($fix_pulse_respawn)
+  }
+
+# Set autospawn to <no> in /etc/pulse/client.conf
+  if $fix_pulse_respawn_real == true {
+    case "${::osfamily}-${::lsbmajdistrelease}" {
+      'Suse-10', 'Suse-11', 'RedHat-6': {
+        file_line { 'disable_pulse_respawn':
+          ensure => present,
+          path   => '/etc/pulse/client.conf',
+          line   => 'autospawn = no',
+          match  => '^autospawn =',
+        }
+      }
+      default: {
+        fail('fix_pulse_respawn is only supported on RedHat 6, Suse 10 & 11.')
       }
     }
   }

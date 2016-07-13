@@ -61,6 +61,13 @@ Nothing will happen with /var/log/messages if it's false.
 
 - *Default*: false
 
+fix_pulse_respawn (boolean)
+---------------------------
+Prevents PulseAudio from respawning. It will set autospawn to no in /etc/pulse/client.conf.
+PulseAudio configuration will not get touched if it's false.
+
+- *Default*: false
+
 fix_services (boolean)
 ----------------------
 Disable useless services based on the osfamily. (nfs service is removed from this disable list.)
